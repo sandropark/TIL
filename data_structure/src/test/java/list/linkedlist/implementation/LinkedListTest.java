@@ -43,4 +43,15 @@ class LinkedListTest {
         assertThat(numbers.get(2)).isEqualTo(30);
     }
 
+    @DisplayName("리스트 가장 마지막에 요소를 추가한다.")
+    @Test
+    void addLast() throws Exception {
+        numbers.addLast(10);
+        numbers.addLast(20);
+        numbers.addLast(30);
+
+        assertThat(numbers.length()).isEqualTo(3);
+        assertThat(numbers.get(2)).isEqualTo(30);
+    }
+
 }

@@ -35,4 +35,15 @@ public class LinkedList {
         return tmpNode.value;
     }
 
+    public void addLast(Object input) {
+        Node lastNode = new Node(input, null);
+        if (size == 0) {
+            addFirst(input);
+        } else {
+            tail.next = lastNode;
+            tail = lastNode;
+            size++;
+        }
+    }
+
 }
