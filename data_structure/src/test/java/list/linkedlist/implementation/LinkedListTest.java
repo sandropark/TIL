@@ -144,4 +144,16 @@ class LinkedListTest {
         assertThat(numbers.get(2)).isEqualTo(30);
     }
 
+    @DisplayName("해당 데이터를 가진 노드의 인덱스를 반환한다.")
+    @Test
+    void indexOf() throws Exception {
+        numbers.addLast(10);
+        numbers.addLast(20);
+        numbers.addLast(30);
+
+        assertThat(numbers.indexOf(10)).isEqualTo(0);
+        assertThat(numbers.indexOf(20)).isEqualTo(1);
+        assertThat(numbers.indexOf(30)).isEqualTo(2);
+    }
+
 }
