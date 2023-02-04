@@ -1,5 +1,6 @@
 package list.arraylist.implement;
 
+import list.arraylist.implement.ArrayList.ListIterator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -163,6 +164,55 @@ class ArrayListTest {
     void indexOf_Exception() throws Exception {
         assertThatThrownBy(() -> numbers.indexOf(1))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("호출할 때마다 처음 요소부터 반환한다.")
+    @Test
+    void listIterator_next() throws Exception {
+        numbers.addLast(10);
+        numbers.addLast(20);
+        numbers.addLast(30);
+        numbers.addLast(40);
+
+        ListIterator li = numbers.listIterator();
+
+        assertThat(li.next()).isEqualTo(10);
+        assertThat(li.next()).isEqualTo(20);
+        assertThat(li.next()).isEqualTo(30);
+        assertThat(li.next()).isEqualTo(40);
+    }
+
+    @DisplayName("인덱스에 요소가 없다면 false를 반한다.")
+    @Test
+    void listIterator_hasNext_false() throws Exception {
+        ListIterator li = numbers.listIterator();
+
+        assertThat(li.hasNext()).isFalse();
+    }
+
+    @DisplayName("인덱스에 요소가 있다면 true를 반한다.")
+    @Test
+    void listIterator_hasNext_true() throws Exception {
+        numbers.addLast(10);
+
+        ListIterator li = numbers.listIterator();
+
+        assertThat(li.hasNext()).isTrue();
+    }
+
+    @DisplayName("반복문 테스트")
+    @Test
+    void listIterator_while() throws Exception {
+        numbers.addLast(10);
+        numbers.addLast(20);
+        numbers.addLast(30);
+        numbers.addLast(40);
+
+        ListIterator li = numbers.listIterator();
+
+        while (li.hasNext()) {
+            System.out.println(li.next());
+        }
     }
 
 }

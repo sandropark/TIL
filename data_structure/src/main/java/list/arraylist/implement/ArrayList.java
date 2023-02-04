@@ -72,4 +72,20 @@ public class ArrayList {
         throw new IllegalArgumentException(element + "는 없는 요소입니다.");
     }
 
+    public ListIterator listIterator() {
+        return new ListIterator();
+    }
+
+    class ListIterator {
+        private int idx;
+
+        public boolean hasNext() {
+            return idx < size;
+        }
+
+        public Object next() {
+            return elementData[idx++];
+        }
+    }
+
 }
