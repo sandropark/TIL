@@ -172,4 +172,29 @@ class LinkedListTest {
         assertThatThrownBy(i::next).isInstanceOf(IllegalStateException.class);
     }
 
+    @DisplayName("iterator 객체에 다음 노드가 있다면 true를, 없다면 false를 반환한다.")
+    @Test
+    void iterator_hasNext_true() throws Exception {
+        numbers.addLast(10);
+
+        LinkedList.ListIterator i = numbers.iterator();
+
+        assertThat(i.hasNext()).isTrue();
+        assertThat(i.next()).isEqualTo(10);
+        assertThat(i.hasNext()).isFalse();
+    }
+
+    @Test
+    void iterator_while() throws Exception {
+        numbers.addLast(10);
+        numbers.addLast(20);
+        numbers.addLast(30);
+
+        LinkedList.ListIterator i = numbers.iterator();
+
+        while (i.hasNext()) {
+            System.out.println(i.next());
+        }
+    }
+
 }

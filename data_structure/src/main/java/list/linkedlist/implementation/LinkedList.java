@@ -30,6 +30,10 @@ public class LinkedList {
             next = next.next;
             return result.value;
         }
+
+        public boolean hasNext() {
+            return next != null;
+        }
     }
 
     public int length() {
