@@ -197,4 +197,47 @@ class LinkedListTest {
         }
     }
 
+    @DisplayName("iterator 에서 값을 추가한다. : 맨 처음")
+    @Test
+    void iterator_add_first() throws Exception {
+        numbers.addLast(10);
+        numbers.addLast(20);
+        numbers.addLast(30);
+
+        LinkedList.ListIterator i = numbers.iterator();
+
+        i.add(5);
+
+        assertThat(numbers.length()).isEqualTo(4);
+
+        assertThat(i.next()).isEqualTo(5);
+        assertThat(i.next()).isEqualTo(10);
+        assertThat(i.next()).isEqualTo(20);
+        assertThat(i.next()).isEqualTo(30);
+    }
+
+    @DisplayName("iterator 에서 값을 추가한다. : 중간")
+    @Test
+    void iterator_add_middle() throws Exception {
+        numbers.addLast(10);
+        numbers.addLast(20);
+        numbers.addLast(30);
+
+        LinkedList.ListIterator i = numbers.iterator();
+
+        i.next();
+        i.add(15);
+
+        assertThat(numbers.length()).isEqualTo(4);
+
+        assertThat(i.next()).isEqualTo(15);
+        assertThat(i.next()).isEqualTo(20);
+        assertThat(i.next()).isEqualTo(30);
+
+        assertThat(numbers.get(0)).isEqualTo(10);
+        assertThat(numbers.get(1)).isEqualTo(15);
+        assertThat(numbers.get(2)).isEqualTo(20);
+        assertThat(numbers.get(3)).isEqualTo(30);
+    }
+
 }

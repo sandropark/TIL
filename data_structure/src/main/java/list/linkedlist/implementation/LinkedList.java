@@ -17,6 +17,7 @@ public class LinkedList {
 
     public class ListIterator {
         private Node next;
+        private Node lastReturned;
 
         public ListIterator() {
             this.next = head;
@@ -26,13 +27,25 @@ public class LinkedList {
             if (next == null) {
                 throw new IllegalStateException("더 이상 값이 없습니다.");
             }
-            Node result = next;
+            lastReturned = next;
             next = next.next;
-            return result.value;
+            return lastReturned.value;
         }
 
         public boolean hasNext() {
             return next != null;
+        }
+
+        public void add(Object input) {
+            Node newNode = new Node(input, next);
+            // 노드 중간이라면
+            if (lastReturned == null) {
+                head = newNode;
+            } else {
+                lastReturned.next = newNode;
+            }
+            next = newNode;
+            size++;
         }
     }
 
