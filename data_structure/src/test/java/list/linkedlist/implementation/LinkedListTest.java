@@ -7,6 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class LinkedListTest {
 
@@ -154,6 +155,21 @@ class LinkedListTest {
         assertThat(numbers.indexOf(10)).isEqualTo(0);
         assertThat(numbers.indexOf(20)).isEqualTo(1);
         assertThat(numbers.indexOf(30)).isEqualTo(2);
+    }
+
+    @DisplayName("iterator 객체로 리스트를 순서대로 순회한다. 더 이상 값이 없다면 예외를 발생한다.")
+    @Test
+    void iterator_next() throws Exception {
+        numbers.addLast(10);
+        numbers.addLast(20);
+        numbers.addLast(30);
+
+        LinkedList.ListIterator i = numbers.iterator();
+
+        assertThat(i.next()).isEqualTo(10);
+        assertThat(i.next()).isEqualTo(20);
+        assertThat(i.next()).isEqualTo(30);
+        assertThatThrownBy(i::next).isInstanceOf(IllegalStateException.class);
     }
 
 }

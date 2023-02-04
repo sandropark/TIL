@@ -14,6 +14,24 @@ public class LinkedList {
             this.next = next;
         }
     }
+
+    public class ListIterator {
+        private Node next;
+
+        public ListIterator() {
+            this.next = head;
+        }
+
+        public Object next() {
+            if (next == null) {
+                throw new IllegalStateException("더 이상 값이 없습니다.");
+            }
+            Node result = next;
+            next = next.next;
+            return result.value;
+        }
+    }
+
     public int length() {
         return size;
     }
@@ -128,6 +146,10 @@ public class LinkedList {
             tmp = tmp.next;
         }
         throw new IllegalArgumentException("유효하지 않은 값입니다. input=" + input);
+    }
+
+    public ListIterator iterator() {
+        return new ListIterator();
     }
 
 }
