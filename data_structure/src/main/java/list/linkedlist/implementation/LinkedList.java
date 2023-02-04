@@ -115,4 +115,8 @@ public class LinkedList {
         return targetNode.value;
     }
 
+    public Object get(int idx) {
+        return node(idx).value;
+    }
+
 }

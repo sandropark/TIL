@@ -33,16 +33,6 @@ class LinkedListTest {
         assertThat(numbers.length()).isEqualTo(3);
     }
 
-    @DisplayName("해당 인덱스의 요소를 반환한다.")
-    @Test
-    void get() throws Exception {
-        numbers.addFirst(30);
-        numbers.addFirst(20);
-        numbers.addFirst(10);
-
-        assertThat(numbers.toString()).isEqualTo("[10,20,30]");
-    }
-
     @DisplayName("리스트 가장 마지막에 요소를 추가한다.")
     @Test
     void addLast() throws Exception {
@@ -63,7 +53,6 @@ class LinkedListTest {
         numbers.add(0, 1);
 
         assertThat(numbers.length()).isEqualTo(3);
-
         assertThat(numbers.toString()).isEqualTo("[1,10,20]");
     }
 
@@ -76,7 +65,6 @@ class LinkedListTest {
         numbers.add(1, 15);
 
         assertThat(numbers.length()).isEqualTo(3);
-
         assertThat(numbers.toString()).isEqualTo("[10,15,20]");
     }
 
@@ -89,7 +77,6 @@ class LinkedListTest {
         numbers.add(2, 30);
 
         assertThat(numbers.length()).isEqualTo(3);
-
         assertThat(numbers.toString()).isEqualTo("[10,20,30]");
     }
 
@@ -143,6 +130,18 @@ class LinkedListTest {
         assertThat(removed).isEqualTo(expectedRemoved);
         assertThat(numbers.length()).isEqualTo(2);
         assertThat(numbers.toString()).isEqualTo(expected);
+    }
+
+    @DisplayName("해당 인덱스 위치 노드의 value를 반환한다.")
+    @Test
+    void get() throws Exception {
+        numbers.addLast(10);
+        numbers.addLast(20);
+        numbers.addLast(30);
+
+        assertThat(numbers.get(0)).isEqualTo(10);
+        assertThat(numbers.get(1)).isEqualTo(20);
+        assertThat(numbers.get(2)).isEqualTo(30);
     }
 
 }
