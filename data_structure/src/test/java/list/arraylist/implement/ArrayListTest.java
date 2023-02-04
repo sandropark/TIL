@@ -86,7 +86,7 @@ class ArrayListTest {
         numbers.addFirst(10);
         numbers.addLast(20);
 
-        System.out.println("numbers = " + numbers);
+        assertThat(numbers.toString()).isEqualTo("[10,20]");
     }
 
 }
