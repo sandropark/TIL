@@ -36,4 +36,7 @@ public class ArrayList {
         size++;
     }
 
+    public void addFirst(Object element) {
+        add(0, element);
+    }
 }

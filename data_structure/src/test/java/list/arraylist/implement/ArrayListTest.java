@@ -66,4 +66,19 @@ class ArrayListTest {
         assertThat(numbers.get(3)).isEqualTo(30);
     }
 
+    @DisplayName("리스트의 첫번째 인덱스에 요소를 추가한다.")
+    @Test
+    void addFirst() throws Exception {
+        numbers.addLast(20);
+        numbers.addLast(30);
+
+        numbers.addFirst(10);
+
+        assertThat(numbers.length()).isEqualTo(3);
+
+        assertThat(numbers.get(0)).isEqualTo(10);
+        assertThat(numbers.get(1)).isEqualTo(20);
+        assertThat(numbers.get(2)).isEqualTo(30);
+    }
+
 }
