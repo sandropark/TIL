@@ -62,4 +62,14 @@ public class ArrayList {
     public Object removeLast() {
         return remove(size-1);
     }
+
+    public int indexOf(Object element) {
+        for (int i = 0; i < size; i++) {
+            if (elementData[i].equals(element)) {
+                return i;
+            }
+        }
+        throw new IllegalArgumentException(element + "는 없는 요소입니다.");
+    }
+
 }

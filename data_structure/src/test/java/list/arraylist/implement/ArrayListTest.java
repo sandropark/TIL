@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ArrayListTest {
 
@@ -144,6 +145,24 @@ class ArrayListTest {
         assertThat(numbers.get(0)).isEqualTo(10);
         assertThat(numbers.get(1)).isEqualTo(20);
         assertThat(numbers.get(2)).isEqualTo(30);
+    }
+
+    @DisplayName("해당 요소의 인덱스를 반환한다.")
+    @Test
+    void indexOf() throws Exception {
+        numbers.addLast(10);
+        numbers.addLast(20);
+        numbers.addLast(30);
+        numbers.addLast(40);
+
+        assertThat(numbers.indexOf(20)).isEqualTo(1);
+    }
+
+    @DisplayName("리스트에 없는 요소인 경우 예외가 발생한다.")
+    @Test
+    void indexOf_Exception() throws Exception {
+        assertThatThrownBy(() -> numbers.indexOf(1))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
 }
