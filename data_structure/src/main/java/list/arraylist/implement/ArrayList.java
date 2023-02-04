@@ -8,4 +8,10 @@ public class ArrayList {
     public int length() {
         return size;
     }
+
+    public boolean addLast(Object element) {
+        elementData[size++] = element;
+        return true;
+    }
+
 }

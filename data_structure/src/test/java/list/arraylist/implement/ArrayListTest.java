@@ -19,4 +19,13 @@ class ArrayListTest {
     void length() throws Exception {
         assertThat(numbers.length()).isEqualTo(0);
     }
+
+    @DisplayName("리스트의 마지막 인덱스에 요소를 추가한다.")
+    @Test
+    void addLast() throws Exception {
+        numbers.addLast(10);
+
+        assertThat(numbers.length()).isEqualTo(1);
+    }
+
 }
