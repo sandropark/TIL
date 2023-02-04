@@ -76,7 +76,7 @@ public class ArrayList {
         return new ListIterator();
     }
 
-    class ListIterator {
+    public class ListIterator {
         private int idx;
 
         public boolean hasNext() {
