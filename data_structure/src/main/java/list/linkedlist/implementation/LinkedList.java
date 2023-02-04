@@ -6,8 +6,8 @@ public class LinkedList {
     private Node tail;
     private int size;
 
-    private class Node {
-        private Object value;
+    private static class Node {
+        private final Object value;
         private Node next;
         public Node(Object input, Node next) {
             value = input;
@@ -24,14 +24,6 @@ public class LinkedList {
         if (head.next == null) {
             tail = head;
         }
-    }
-
-    public Object get(int idx) {
-        Node tmpNode = head;
-        for (int i = 0; i < idx; i++) {
-            tmpNode = tmpNode.next;
-        }
-        return tmpNode.value;
     }
 
     public void addLast(Object input) {
