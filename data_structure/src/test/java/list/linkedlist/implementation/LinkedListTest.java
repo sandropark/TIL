@@ -115,3 +115,34 @@ class LinkedListTest {
         assertThat(numbers.length()).isEqualTo(2);
         assertThat(numbers.toString()).isEqualTo("[20,30]");
     }
+
+    @DisplayName("마지막 노드를 삭제한다.")
+    @Test
+    void removeLast() throws Exception {
+        numbers.addLast(10);
+        numbers.addLast(20);
+        numbers.addLast(30);
+
+        Object removed = numbers.removeLast();
+
+        assertThat(removed).isEqualTo(30);
+        assertThat(numbers.length()).isEqualTo(2);
+        assertThat(numbers.toString()).isEqualTo("[10,20]");
+    }
+
+    @DisplayName("해당 인덱스의 노드를 삭제한다.")
+    @ParameterizedTest
+    @CsvSource(value = {"0-10-[20,30]", "1-20-[10,30]", "2-30-[10,20]"}, delimiterString = "-")
+    void remove(int idx, int expectedRemoved, String expected) throws Exception {
+        numbers.addLast(10);
+        numbers.addLast(20);
+        numbers.addLast(30);
+
+        Object removed = numbers.remove(idx);
+
+        assertThat(removed).isEqualTo(expectedRemoved);
+        assertThat(numbers.length()).isEqualTo(2);
+        assertThat(numbers.toString()).isEqualTo(expected);
+    }
+
+}

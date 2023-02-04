@@ -87,3 +87,32 @@ public class LinkedList {
         size--;
         return removed.value;
     }
+
+    public Object removeLast() {
+        Node removed = tail;
+
+        tail = node(size - 2);
+        tail.next = null;
+        size--;
+        return removed.value;
+    }
+
+    public Object remove(int idx) {
+        // 처음
+        if (idx == 0) {
+            return removeFirst();
+        }
+
+        // 마지막
+        if (idx == size - 1) {
+            return removeLast();
+        }
+
+        Node preNode = node(idx - 1);
+        Node targetNode = preNode.next;
+        preNode.next = preNode.next.next;
+        size--;
+        return targetNode.value;
+    }
+
+}
