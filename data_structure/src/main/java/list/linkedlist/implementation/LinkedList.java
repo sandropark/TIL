@@ -119,4 +119,15 @@ public class LinkedList {
         return node(idx).value;
     }
 
+    public int indexOf(Object input) {
+        Node tmp = head;
+        for (int i = 0; i < size; i++) {
+            if (tmp.value.equals(input)) {
+                return i;
+            }
+            tmp = tmp.next;
+        }
+        throw new IllegalArgumentException("유효하지 않은 값입니다. input=" + input);
+    }
+
 }
