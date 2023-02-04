@@ -7,7 +7,6 @@ public class LinkedList {
     private int size;
 
     private class Node {
-
         private Object value;
         private Node next;
         public Node(Object input, Node next) {
@@ -44,6 +43,32 @@ public class LinkedList {
             tail = lastNode;
             size++;
         }
+    }
+
+    private Node node(int idx) {
+        Node tmpNode = head;
+        for (int i = 0; i < idx; i++) {
+            tmpNode = tmpNode.next;
+        }
+        return tmpNode;
+    }
+
+    public void add(int idx, Object input) {
+        // 처음
+        if (idx == 0) {
+            addFirst(input);
+            return;
+        }
+        // 마지막
+        if (idx == size) {
+            addLast(input);
+            return;
+        }
+
+        Node preNode = node(idx - 1);
+        Node tmpNode = preNode.next;
+        preNode.next = new Node(input, tmpNode);
+        size++;
     }
 
 }
