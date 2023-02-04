@@ -31,4 +31,18 @@ public class ArrayList {
     public void addFirst(Object element) {
         add(0, element);
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (int i = 0; i < size; i++) {
+            sb.append(elementData[i]);
+            if (i < size - 1) {
+                sb.append(",");
+            }
+        }
+        return sb.append("]").toString();
+    }
+
 }

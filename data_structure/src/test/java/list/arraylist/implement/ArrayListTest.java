@@ -81,4 +81,12 @@ class ArrayListTest {
         assertThat(numbers.get(2)).isEqualTo(30);
     }
 
+    @Test
+    void toStringTest() throws Exception {
+        numbers.addFirst(10);
+        numbers.addLast(20);
+
+        System.out.println("numbers = " + numbers);
+    }
+
 }
