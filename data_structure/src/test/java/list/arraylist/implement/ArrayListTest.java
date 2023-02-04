@@ -89,6 +89,7 @@ class ArrayListTest {
         assertThat(numbers.toString()).isEqualTo("[10,20]");
     }
 
+    @DisplayName("해당하는 인덱스의 요소를 삭제하면서 반환한다. 빈 공간은 채워진다.")
     @Test
     void remove() throws Exception {
         numbers.addLast(10);
@@ -105,6 +106,44 @@ class ArrayListTest {
         assertThat(numbers.get(0)).isEqualTo(10);
         assertThat(numbers.get(1)).isEqualTo(30);
         assertThat(numbers.get(2)).isEqualTo(40);
+    }
+
+    @DisplayName("첫 번째 요소를 삭제한다.")
+    @Test
+    void removeFirst() throws Exception {
+        numbers.addLast(10);
+        numbers.addLast(20);
+        numbers.addLast(30);
+        numbers.addLast(40);
+
+        Object removed = numbers.removeFirst();
+
+        assertThat(removed).isEqualTo(10);
+
+        assertThat(numbers.length()).isEqualTo(3);
+
+        assertThat(numbers.get(0)).isEqualTo(20);
+        assertThat(numbers.get(1)).isEqualTo(30);
+        assertThat(numbers.get(2)).isEqualTo(40);
+    }
+
+    @DisplayName("마지막 요소를 삭제한다.")
+    @Test
+    void removeLast() throws Exception {
+        numbers.addLast(10);
+        numbers.addLast(20);
+        numbers.addLast(30);
+        numbers.addLast(40);
+
+        Object removed = numbers.removeLast();
+
+        assertThat(removed).isEqualTo(40);
+
+        assertThat(numbers.length()).isEqualTo(3);
+
+        assertThat(numbers.get(0)).isEqualTo(10);
+        assertThat(numbers.get(1)).isEqualTo(20);
+        assertThat(numbers.get(2)).isEqualTo(30);
     }
 
 }
