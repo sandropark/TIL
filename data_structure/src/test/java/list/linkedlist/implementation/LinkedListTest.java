@@ -102,4 +102,16 @@ class LinkedListTest {
         assertThat(numbers.toString()).isEqualTo(expected);
     }
 
-}
+    @DisplayName("첫 번째 노드를 삭제한다.")
+    @Test
+    void removeFirst() throws Exception {
+        numbers.addLast(10);
+        numbers.addLast(20);
+        numbers.addLast(30);
+
+        Object removed = numbers.removeFirst();
+
+        assertThat(removed).isEqualTo(10);
+        assertThat(numbers.length()).isEqualTo(2);
+        assertThat(numbers.toString()).isEqualTo("[20,30]");
+    }

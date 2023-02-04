@@ -80,4 +80,10 @@ public class LinkedList {
                 .append("]")
                 .toString();
     }
-}
+
+    public Object removeFirst() {
+        Node removed = head;
+        head = removed.next;
+        size--;
+        return removed.value;
+    }
