@@ -86,6 +86,15 @@ public class ArrayList {
         public Object next() {
             return elementData[idx++];
         }
+
+        public boolean hasPrevious() {
+            return idx > 0;
+        }
+
+        public Object previous() {
+            return elementData[--idx];
+        }
+
     }
 
 }

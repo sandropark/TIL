@@ -200,9 +200,9 @@ class ArrayListTest {
         assertThat(li.hasNext()).isTrue();
     }
 
-    @DisplayName("반복문 테스트")
+    @DisplayName("반복문 테스트 - next")
     @Test
-    void listIterator_while() throws Exception {
+    void listIterator_while_next() throws Exception {
         numbers.addLast(10);
         numbers.addLast(20);
         numbers.addLast(30);
@@ -212,6 +212,73 @@ class ArrayListTest {
 
         while (li.hasNext()) {
             System.out.println(li.next());
+        }
+    }
+
+    @DisplayName("이전 요소가 없는 경우 false를 반환한다.")
+    @Test
+    void listIterator_hasPrevious_false() throws Exception {
+        ListIterator li = numbers.listIterator();
+
+        assertThat(li.hasPrevious()).isFalse();
+    }
+
+    @DisplayName("이전 요소가 있는 경우 true를 반환한다.")
+    @Test
+    void listIterator_hasPrevious_true() throws Exception {
+        numbers.addLast(10);
+
+        ListIterator li = numbers.listIterator();
+        li.next();
+
+        assertThat(li.hasPrevious()).isTrue();
+    }
+
+    @DisplayName("호출할 때마다 이전요소를 반환한다.")
+    @Test
+    void listIterator_previous() throws Exception {
+        numbers.addLast(10);
+        numbers.addLast(20);
+        numbers.addLast(30);
+        numbers.addLast(40);
+
+        ListIterator li = numbers.listIterator();
+
+        while (li.hasNext()) {
+            li.next();
+        }
+
+        assertThat(li.previous()).isEqualTo(40);
+        assertThat(li.previous()).isEqualTo(30);
+        assertThat(li.previous()).isEqualTo(20);
+        assertThat(li.previous()).isEqualTo(10);
+    }
+
+    @DisplayName("이전 요소가 없는 경우 예외가 발생한다.")
+    @Test
+    void listIterator_previous_exception() throws Exception {
+        ListIterator li = numbers.listIterator();
+
+        assertThatThrownBy(() -> li.previous())
+                .isInstanceOf(IndexOutOfBoundsException.class);
+    }
+
+    @DisplayName("반복문 테스트 - previous")
+    @Test
+    void listIterator_while_previous() throws Exception {
+        numbers.addLast(10);
+        numbers.addLast(20);
+        numbers.addLast(30);
+        numbers.addLast(40);
+
+        ListIterator li = numbers.listIterator();
+
+        while (li.hasNext()) {
+            li.next();
+        }
+
+        while (li.hasPrevious()) {
+            System.out.println(li.previous());
         }
     }
 
