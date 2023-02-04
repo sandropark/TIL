@@ -282,4 +282,48 @@ class ArrayListTest {
         }
     }
 
+    @DisplayName("iterator 에 요소를 추가한다.")
+    @Test
+    void listIterator_add() throws Exception {
+        ListIterator li = numbers.listIterator();
+
+        li.add(10);
+
+        assertThat(numbers.length()).isEqualTo(1);
+        assertThat(li.next()).isEqualTo(10);
+    }
+
+    @DisplayName("iterator 에 요소를 삭제한다.")
+    @Test
+    void listIterator_remove() throws Exception {
+        ListIterator li = numbers.listIterator();
+
+        li.add(10);
+        li.next();
+        li.remove();
+
+        assertThat(numbers.length()).isEqualTo(0);
+        assertThat(li.hasNext()).isFalse();
+    }
+
+    @DisplayName("iterator 에 요소를 삭제한다. : 요소가 없는 경우 예외가 발생한다.")
+    @Test
+    void listIterator_remove_noElement() throws Exception {
+        ListIterator li = numbers.listIterator();
+
+        assertThatThrownBy(li::remove)
+                .isInstanceOf(IllegalStateException.class);
+    }
+
+    @DisplayName("iterator 에 요소를 삭제한다. : 바라보는 요소가 없는 경우 예외가 발생한다.")
+    @Test
+    void listIterator_remove_() throws Exception {
+        numbers.addLast(10);
+
+        ListIterator li = numbers.listIterator();
+
+        assertThatThrownBy(li::remove)
+                .isInstanceOf(IllegalStateException.class);
+    }
+
 }

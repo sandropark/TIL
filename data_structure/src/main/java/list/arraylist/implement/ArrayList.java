@@ -3,7 +3,7 @@ package list.arraylist.implement;
 public class ArrayList {
     public static final int INITIAL_SIZE = 100;
     private int size;
-    private Object[] elementData = new Object[INITIAL_SIZE];
+    private final Object[] elementData = new Object[INITIAL_SIZE];
 
     public int length() {
         return size;
@@ -95,6 +95,16 @@ public class ArrayList {
             return elementData[--idx];
         }
 
+        public void add(Object element) {
+            ArrayList.this.add(idx, element);
+        }
+
+        public void remove() {
+            if (idx == 0) {
+                throw new IllegalStateException("현재 요소가 없습니다.");
+            }
+            ArrayList.this.remove(--idx);
+        }
     }
 
 }
