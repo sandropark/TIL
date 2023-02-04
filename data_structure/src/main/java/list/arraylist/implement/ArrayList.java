@@ -14,4 +14,8 @@ public class ArrayList {
         return true;
     }
 
+    public Object get(int idx) {
+        return elementData[idx];
+    }
+
 }

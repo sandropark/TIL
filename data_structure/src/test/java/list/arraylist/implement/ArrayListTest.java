@@ -28,4 +28,12 @@ class ArrayListTest {
         assertThat(numbers.length()).isEqualTo(1);
     }
 
+    @DisplayName("해당 인덱스의 요소를 반환한다.")
+    @Test
+    void get() throws Exception {
+        numbers.addLast(10);
+
+        assertThat(numbers.get(0)).isEqualTo(10);
+    }
+
 }
