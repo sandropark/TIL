@@ -89,4 +89,22 @@ class ArrayListTest {
         assertThat(numbers.toString()).isEqualTo("[10,20]");
     }
 
+    @Test
+    void remove() throws Exception {
+        numbers.addLast(10);
+        numbers.addLast(20);
+        numbers.addLast(30);
+        numbers.addLast(40);
+
+        Object removed = numbers.remove(1);
+
+        assertThat(removed).isEqualTo(20);
+
+        assertThat(numbers.length()).isEqualTo(3);
+
+        assertThat(numbers.get(0)).isEqualTo(10);
+        assertThat(numbers.get(1)).isEqualTo(30);
+        assertThat(numbers.get(2)).isEqualTo(40);
+    }
+
 }

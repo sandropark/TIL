@@ -45,4 +45,13 @@ public class ArrayList {
         return sb.append("]").toString();
     }
 
+    public Object remove(int idx) {
+        Object removed = elementData[idx];
+        for (int i = idx; i < size; i++) {
+            elementData[i] = elementData[i + 1];
+        }
+        elementData[size - 1] = null;
+        size--;
+        return removed;
+    }
 }
