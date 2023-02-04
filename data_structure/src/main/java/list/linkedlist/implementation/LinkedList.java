@@ -71,4 +71,21 @@ public class LinkedList {
         size++;
     }
 
+    @Override
+    public String toString() {
+        if (head == null) {
+            return "[]";
+        }
+        StringBuilder sb = new StringBuilder().append("[");
+
+        Node tmpNode = head;
+        while (tmpNode.next != null) {
+            sb.append(tmpNode.value).append(",");
+            tmpNode = tmpNode.next;
+        }
+
+        return sb.append(tmpNode.value)
+                .append("]")
+                .toString();
+    }
 }

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
@@ -102,6 +103,15 @@ class LinkedListTest {
         assertThat(numbers.get(0)).isEqualTo(10);
         assertThat(numbers.get(1)).isEqualTo(20);
         assertThat(numbers.get(2)).isEqualTo(30);
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {"0 []", "1 [10]", "2 [10,20]"}, delimiterString = " ")
+    void toStringTest(int size, String expected) throws Exception {
+        for (int i = 0; i < size; i++) {
+            numbers.addLast((i+1) * 10);
+        }
+        assertThat(numbers.toString()).isEqualTo(expected);
     }
 
 }
