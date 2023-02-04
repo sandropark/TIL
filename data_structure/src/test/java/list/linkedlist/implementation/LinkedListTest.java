@@ -240,4 +240,38 @@ class LinkedListTest {
         assertThat(numbers.get(3)).isEqualTo(30);
     }
 
+    @DisplayName("iterator 에서 값을 삭제한다. 반환한 노드가 없다면 예외를 발생한다.")
+    @Test
+    void iterator_remove() throws Exception {
+        numbers.addLast(10);
+        numbers.addLast(20);
+        numbers.addLast(30);
+
+        LinkedList.ListIterator i = numbers.iterator();
+
+        assertThatThrownBy(i::remove).isInstanceOf(IllegalStateException.class);
+        i.next();
+        i.remove();
+        assertThat(numbers.length()).isEqualTo(2);
+        assertThat(numbers.get(0)).isEqualTo(20);
+        assertThat(numbers.get(1)).isEqualTo(30);
+    }
+
+    @DisplayName("iterator 에서 값을 삭제한다. 중간")
+    @Test
+    void iterator_remove_middle() throws Exception {
+        numbers.addLast(10);
+        numbers.addLast(20);
+        numbers.addLast(30);
+
+        LinkedList.ListIterator i = numbers.iterator();
+
+        i.next();
+        i.next();
+        i.remove();
+        assertThat(numbers.length()).isEqualTo(2);
+        assertThat(numbers.get(0)).isEqualTo(10);
+        assertThat(numbers.get(1)).isEqualTo(30);
+    }
+
 }

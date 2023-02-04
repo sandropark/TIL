@@ -18,6 +18,7 @@ public class LinkedList {
     public class ListIterator {
         private Node next;
         private Node lastReturned;
+        private int nextIndex;
 
         public ListIterator() {
             this.next = head;
@@ -29,6 +30,7 @@ public class LinkedList {
             }
             lastReturned = next;
             next = next.next;
+            nextIndex++;
             return lastReturned.value;
         }
 
@@ -46,6 +48,13 @@ public class LinkedList {
             }
             next = newNode;
             size++;
+        }
+
+        public Object remove() {
+            if (lastReturned == null) {
+                throw new IllegalStateException("삭제할 노드가 없습니다.");
+            }
+            return LinkedList.this.remove(1 - nextIndex--);
         }
     }
 
