@@ -27,4 +27,12 @@ public class LinkedList {
         }
     }
 
+    public Object get(int idx) {
+        Node tmpNode = head;
+        for (int i = 0; i < idx; i++) {
+            tmpNode = tmpNode.next;
+        }
+        return tmpNode.value;
+    }
+
 }

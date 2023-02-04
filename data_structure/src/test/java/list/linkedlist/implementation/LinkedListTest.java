@@ -31,4 +31,16 @@ class LinkedListTest {
         assertThat(numbers.length()).isEqualTo(3);
     }
 
+    @DisplayName("해당 인덱스의 요소를 반환한다.")
+    @Test
+    void get() throws Exception {
+        numbers.addFirst(30);
+        numbers.addFirst(20);
+        numbers.addFirst(10);
+
+        assertThat(numbers.get(0)).isEqualTo(10);
+        assertThat(numbers.get(1)).isEqualTo(20);
+        assertThat(numbers.get(2)).isEqualTo(30);
+    }
+
 }
