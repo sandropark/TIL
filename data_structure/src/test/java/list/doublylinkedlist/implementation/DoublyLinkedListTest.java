@@ -4,6 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -169,6 +172,32 @@ class DoublyLinkedListTest {
 
         i.next();
         assertThat(i.hasPrevious()).isTrue();
+    }
+
+    @DisplayName("iterator - 요소를 추가한다.")
+    @Test
+    void iterator_add() throws Exception {
+        DoublyLinkedList.ListIterator i = numbers.iterator();
+
+        i.add(10);
+        i.add(20);
+
+        assertThat(numbers.length()).isEqualTo(2);
+        assertThat(numbers.toString()).isEqualTo("[20,10]");
+
+        assertThat(i.next()).isEqualTo(20);
+        assertThat(i.next()).isEqualTo(10);
+
+        i.add(30);
+        assertThat(numbers.length()).isEqualTo(3);
+        assertThat(numbers.toString()).isEqualTo("[20,10,30]");
+
+        i.add(40);
+        assertThat(numbers.length()).isEqualTo(4);
+        assertThat(numbers.toString()).isEqualTo("[20,10,40,30]");
+
+        assertThat(i.previous()).isEqualTo(10);
+        assertThat(i.previous()).isEqualTo(20);
     }
 
 }

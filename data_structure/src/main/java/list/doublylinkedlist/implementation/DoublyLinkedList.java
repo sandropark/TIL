@@ -64,13 +64,24 @@ public class DoublyLinkedList {
         }
 
         public void add(Object input) {
-            Node newNode = new Node(input, next);
-            // 노드 중간이라면
+            // 한 번도 next 하지 않은 경우
             if (lastReturned == null) {
-                head = newNode;
-            } else {
-                lastReturned.next = newNode;
+                addFirst(input);
+                next = head;
+                return;
             }
+            // 가장 마지막인 경우
+            // nextIndex 는 1증가한다.
+            if (lastReturned == tail) {
+                addLast(input);
+                next = tail;
+                nextIndex++;
+                return;
+            }
+            //  중간
+            Node newNode = new Node(input);
+            link(lastReturned, newNode);
+            link(newNode, next);
             next = newNode;
             size++;
         }
@@ -105,9 +116,9 @@ public class DoublyLinkedList {
     }
 
     public void addFirst(Object input) {
-        Node newNode = new Node(input, head);
+        Node newNode = new Node(input);
         if (head != null) {
-            head.setPrev(newNode);
+            link(newNode, head);
         }
         head = newNode;
         size++;
