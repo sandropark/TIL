@@ -200,4 +200,19 @@ class DoublyLinkedListTest {
         assertThat(i.previous()).isEqualTo(20);
     }
 
+    @DisplayName("iterator - 요소를 삭제한다.")
+    @Test
+    void iterator_remove() throws Exception {
+        DoublyLinkedList.ListIterator i = numbers.iterator();
+        // 1. 없을 때는 예외 발생
+        assertThatThrownBy(i::remove).isInstanceOf(IllegalStateException.class);
+
+        i.add(10);
+
+        assertThat(i.next()).isEqualTo(10);
+        assertThat(i.remove()).isEqualTo(10);
+        assertThat(numbers.length()).isEqualTo(0);
+        assertThat(numbers.toString()).isEqualTo("[]");
+    }
+
 }

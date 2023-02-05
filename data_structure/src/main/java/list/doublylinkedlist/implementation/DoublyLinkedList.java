@@ -35,6 +35,10 @@ public class DoublyLinkedList {
             return next != null;
         }
 
+        public boolean isPresentPrev() {
+            return prev != null;
+        }
+
         public Object getValue() {
             return value;
         }
@@ -90,7 +94,25 @@ public class DoublyLinkedList {
             if (lastReturned == null) {
                 throw new IllegalStateException("삭제할 노드가 없습니다.");
             }
-            return DoublyLinkedList.this.remove(1 - nextIndex--);
+            Node target = lastReturned;
+            Node p = lastReturned.prev;
+            Node n = lastReturned.next;
+
+            if (p == null) {
+                head = n;
+            } else {
+                p.next = n;
+            }
+            if (n == null) {
+                tail = p;
+            } else {
+                n.prev = p;
+            }
+
+            lastReturned = p;
+            nextIndex = nextIndex > 0 ? nextIndex - 1 : nextIndex;
+            size--;
+            return target.value;
         }
 
         public Object previous() {
