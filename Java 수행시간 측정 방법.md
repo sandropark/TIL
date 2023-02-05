@@ -1,4 +1,4 @@
-# Java 수행시간 비교 방법
+# Java 수행시간 측정 방법
 
 ## nonoTime
 
