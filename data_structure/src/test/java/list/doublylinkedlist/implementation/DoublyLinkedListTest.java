@@ -127,4 +127,48 @@ class DoublyLinkedListTest {
         assertThat(numbers.toString()).isEqualTo("[10,30]");
     }
 
+    @DisplayName("iterator를 사용해서 노드를 순회한다.")
+    @Test
+    void iterator() throws Exception {
+        numbers.addFirst(30);
+        numbers.addFirst(20);
+        numbers.addFirst(10);
+
+        DoublyLinkedList.ListIterator i = numbers.iterator();
+
+        assertThat(i.next()).isEqualTo(10);
+        assertThat(i.next()).isEqualTo(20);
+        assertThat(i.next()).isEqualTo(30);
+        assertThatThrownBy(i::next).isInstanceOf(IllegalStateException.class);
+
+        assertThat(i.previous()).isEqualTo(30);
+        assertThat(i.previous()).isEqualTo(20);
+        assertThat(i.previous()).isEqualTo(10);
+        assertThatThrownBy(i::previous).isInstanceOf(IllegalStateException.class);
+
+        assertThat(i.next()).isEqualTo(10);
+        assertThat(i.next()).isEqualTo(20);
+        assertThat(i.next()).isEqualTo(30);
+        assertThatThrownBy(i::next).isInstanceOf(IllegalStateException.class);
+    }
+
+    @DisplayName("iterator - 이전 노드가 없으면 false를 반환한다.")
+    @Test
+    void iterator_hasPrevious_false() throws Exception {
+        DoublyLinkedList.ListIterator i = numbers.iterator();
+
+        assertThat(i.hasPrevious()).isFalse();
+    }
+
+    @DisplayName("iterator - 이전 노드가 있으면 true를 반환한다.")
+    @Test
+    void iterator_hasPrevious_true() throws Exception {
+        numbers.addFirst(10);
+
+        DoublyLinkedList.ListIterator i = numbers.iterator();
+
+        i.next();
+        assertThat(i.hasPrevious()).isTrue();
+    }
+
 }

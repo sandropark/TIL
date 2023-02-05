@@ -81,6 +81,23 @@ public class DoublyLinkedList {
             }
             return DoublyLinkedList.this.remove(1 - nextIndex--);
         }
+
+        public Object previous() {
+            if (nextIndex == 0) {
+                throw new IllegalStateException("더 이상 값이 없습니다.");
+            }
+            if (next == null) {
+                lastReturned = next = tail;
+            } else {
+                lastReturned = next = next.prev;
+            }
+            nextIndex--;
+            return lastReturned.value;
+        }
+
+        public boolean hasPrevious() {
+            return nextIndex > 0;
+        }
     }
 
     public int length() {
