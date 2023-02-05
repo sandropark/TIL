@@ -1,6 +1,6 @@
 package list.compare;
 
-import list.arraylist.implement.ArrayList;
+import list.arraylist.implementation.ArrayList;
 import list.linkedlist.implementation.LinkedList;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

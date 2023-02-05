@@ -1,4 +1,4 @@
-package list.arraylist.implement;
+package list.arraylist.implementation;
 
 public class ArrayList {
     public static final int INITIAL_SIZE = 100;

@@ -1,6 +1,6 @@
-package list.arraylist.implement;
+package list.arraylist.implementation;
 
-import list.arraylist.implement.ArrayList.ListIterator;
+import list.arraylist.implementation.ArrayList.ListIterator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

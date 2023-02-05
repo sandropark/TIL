@@ -1,4 +1,4 @@
-package list.arraylist.implement;
+package list.arraylist.implementation;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
