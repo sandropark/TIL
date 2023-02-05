@@ -2,7 +2,7 @@
 
 ## Java
 
-- [Java 수행시간 측정 방법](https://github.com/sandropark/TIL/blob/main/Java%20%EC%88%98%ED%96%89%EC%8B%9C%EA%B0%84%20%EB%B9%84%EA%B5%90%20%EB%B0%A9%EB%B2%95.md)
+- [Java 수행시간 측정 방법](https://github.com/sandropark/TIL/blob/main/Java%20%EC%88%98%ED%96%89%EC%8B%9C%EA%B0%84%20%EC%B8%A1%EC%A0%95%20%EB%B0%A9%EB%B2%95.md)
 
 ## Git
 
