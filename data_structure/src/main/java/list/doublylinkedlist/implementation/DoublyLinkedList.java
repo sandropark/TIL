@@ -96,8 +96,7 @@ public class DoublyLinkedList {
         if (size == 0) {
             addFirst(input);
         } else {
-            newNode.prev = tail;  // TODO : 생성자로 리펙토링하기
-            tail.next = newNode;
+            link(tail, newNode);
             tail = newNode;
             size++;
         }
