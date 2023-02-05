@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class DoublyLinkedListTest {
 
@@ -69,6 +70,61 @@ class DoublyLinkedListTest {
 
         assertThat(numbers.node(0).getValue()).isEqualTo(10);
         assertThat(numbers.node(2).getValue()).isEqualTo(30);
+    }
+
+    @DisplayName("처음 노드를 삭제한다.")
+    @Test
+    void removeFirst() throws Exception {
+        assertThatThrownBy(numbers::removeFirst)
+                .isInstanceOf(IllegalStateException.class);
+
+        numbers.addLast(10);
+        numbers.addLast(20);
+
+        assertThat(numbers.removeFirst()).isEqualTo(10);
+        assertThat(numbers.length()).isEqualTo(1);
+
+        assertThat(numbers.removeFirst()).isEqualTo(20);
+        assertThat(numbers.length()).isEqualTo(0);
+
+        assertThatThrownBy(numbers::removeFirst)
+                .isInstanceOf(IllegalStateException.class);
+    }
+
+    @DisplayName("마지막 노드를 삭제한다.")
+    @Test
+    void removeLast() throws Exception {
+        assertThatThrownBy(numbers::removeLast)
+                .isInstanceOf(IllegalStateException.class);
+
+        numbers.addLast(10);
+        numbers.addLast(20);
+
+        assertThat(numbers.removeLast()).isEqualTo(20);
+        assertThat(numbers.length()).isEqualTo(1);
+        assertThat(numbers.toString()).isEqualTo("[10]");
+
+        assertThat(numbers.removeLast()).isEqualTo(10);
+        assertThat(numbers.length()).isEqualTo(0);
+        assertThat(numbers.toString()).isEqualTo("[]");
+
+        assertThatThrownBy(numbers::removeLast)
+                .isInstanceOf(IllegalStateException.class);
+    }
+
+    @DisplayName("해당 인덱스의 노드를 삭제한다.")
+    @Test
+    void remove() throws Exception {
+        assertThatThrownBy(() -> numbers.remove(0))
+                .isInstanceOf(IllegalStateException.class);
+
+        numbers.addFirst(30);
+        numbers.addFirst(20);
+        numbers.addFirst(10);
+
+        assertThat(numbers.remove(1)).isEqualTo(20);
+        assertThat(numbers.length()).isEqualTo(2);
+        assertThat(numbers.toString()).isEqualTo("[10,30]");
     }
 
 }

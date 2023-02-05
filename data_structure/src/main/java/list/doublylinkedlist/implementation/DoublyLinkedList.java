@@ -31,6 +31,10 @@ public class DoublyLinkedList {
             return next == null;
         }
 
+        public boolean isPresentNext() {
+            return next != null;
+        }
+
         public Object getValue() {
             return value;
         }
@@ -108,7 +112,7 @@ public class DoublyLinkedList {
 
     protected Node node(int idx) {
         Node tmpNode;
-        
+
         if (idx < size / 2) {
             tmpNode = head;
             for (int i = 0; i < idx; i++) {
@@ -169,19 +173,37 @@ public class DoublyLinkedList {
     }
 
     public Object removeFirst() {
-        Node removed = head;
-        head = removed.next;
+        if (size == 0) {
+            throw new IllegalStateException("Node가 없습니다.");
+        }
+
+        Node toBeDeleted = head;
+        if (toBeDeleted.isPresentNext()) {
+            head = toBeDeleted.next;
+            head.setPrev(null);
+        }
         size--;
-        return removed.value;
+        if (size == 0) {
+            head = null;
+            tail = null;
+        }
+        return toBeDeleted.value;
     }
 
     public Object removeLast() {
-        Node removed = tail;
+        if (size == 0) {
+            throw new IllegalStateException("Node가 없습니다.");
+        }
 
-        tail = node(size - 2);
+        if (size == 1) {
+            return removeFirst();
+        }
+
+        Node toBeDeleted = tail;
+        tail = toBeDeleted.prev;
         tail.next = null;
         size--;
-        return removed.value;
+        return toBeDeleted.value;
     }
 
     public Object remove(int idx) {
@@ -195,11 +217,12 @@ public class DoublyLinkedList {
             return removeLast();
         }
 
-        Node preNode = node(idx - 1);
-        Node targetNode = preNode.next;
-        preNode.next = preNode.next.next;
+        Node target = node(idx);
+        Node prev = target.prev;
+        Node next = target.next;
+        link(prev, next);
         size--;
-        return targetNode.value;
+        return target.value;
     }
 
     public Object get(int idx) {
