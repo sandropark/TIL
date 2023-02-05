@@ -1,10 +1,10 @@
 # Java 수행시간 비교 방법
 
 ## nonoTime
----
+
 nanotime은 자바 기본 라이브러리에 포함된 기능이다. nanoTime은 기준 시점에서 경과된 시간을 **나노초** 단위로 측정한다. 
 
-| 나노초 (nanoseconds) : 십억분의 1초
+> 나노초 (nanoseconds) : 십억분의 1초
 
 ```
 long start = System.nanoTime();
@@ -14,7 +14,7 @@ long time = end - start;
 ```
 
 ## StopWatch
----
+
 스프링 프레임워크를 사용한다면 StopWatch를 사용할 수 있다. 
 
 ```
