@@ -30,6 +30,10 @@ public class DoublyLinkedList {
         public boolean isNextNull() {
             return next == null;
         }
+
+        public Object getValue() {
+            return value;
+        }
     }
 
     public class ListIterator {
@@ -102,11 +106,21 @@ public class DoublyLinkedList {
         }
     }
 
-    private Node node(int idx) {
-        Node tmpNode = head;
-        for (int i = 0; i < idx; i++) {
-            tmpNode = tmpNode.next;
+    protected Node node(int idx) {
+        Node tmpNode;
+        
+        if (idx < size / 2) {
+            tmpNode = head;
+            for (int i = 0; i < idx; i++) {
+                tmpNode = tmpNode.next;
+            }
+        } else {
+            tmpNode = tail;
+            for (int i = size - 1; i > idx; i--) {
+                tmpNode = tmpNode.prev;
+            }
         }
+
         return tmpNode;
     }
 

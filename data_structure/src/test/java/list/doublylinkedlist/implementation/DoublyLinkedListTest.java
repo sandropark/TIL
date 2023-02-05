@@ -60,4 +60,15 @@ class DoublyLinkedListTest {
         assertThat(numbers.get(2)).isEqualTo(20);
     }
 
+    @DisplayName("해당 인덱스의 노드를 반환한다. 인덱스에 따라서 탐색 시작시점이 달라진다.")
+    @Test
+    void node() throws Exception {
+        numbers.addLast(10);
+        numbers.addLast(20);
+        numbers.addLast(30);
+
+        assertThat(numbers.node(0).getValue()).isEqualTo(10);
+        assertThat(numbers.node(2).getValue()).isEqualTo(30);
+    }
+
 }
