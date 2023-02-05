@@ -41,4 +41,23 @@ class DoublyLinkedListTest {
         assertThat(numbers.get(1)).isEqualTo(20);
     }
 
+    @DisplayName("해당 인덱스에 노드를 추가한다.")
+    @Test
+    void add() throws Exception {
+        numbers.add(0, 10);
+        assertThat(numbers.length()).isEqualTo(1);
+        assertThat(numbers.get(0)).isEqualTo(10);
+
+        numbers.add(1, 20);
+        assertThat(numbers.length()).isEqualTo(2);
+        assertThat(numbers.get(0)).isEqualTo(10);
+        assertThat(numbers.get(1)).isEqualTo(20);
+
+        numbers.add(1, 15);
+        assertThat(numbers.length()).isEqualTo(3);
+        assertThat(numbers.get(0)).isEqualTo(10);
+        assertThat(numbers.get(1)).isEqualTo(15);
+        assertThat(numbers.get(2)).isEqualTo(20);
+    }
+
 }

@@ -14,6 +14,22 @@ public class DoublyLinkedList {
             value = input;
             this.next = next;
         }
+
+        public Node(Object input) {
+            value = input;
+        }
+
+        public void setNext(Node next) {
+            this.next = next;
+        }
+
+        public void setPrev(Node prev) {
+            this.prev = prev;
+        }
+
+        public boolean isNextNull() {
+            return next == null;
+        }
     }
 
     public class ListIterator {
@@ -66,11 +82,11 @@ public class DoublyLinkedList {
     public void addFirst(Object input) {
         Node newNode = new Node(input, head);
         if (head != null) {
-            head.prev = newNode;
+            head.setPrev(newNode);
         }
         head = newNode;
         size++;
-        if (head.next == null) {
+        if (head.isNextNull()) {
             tail = head;
         }
     }
@@ -107,10 +123,18 @@ public class DoublyLinkedList {
             return;
         }
 
-        Node preNode = node(idx - 1);
-        Node tmpNode = preNode.next;
-        preNode.next = new Node(input, tmpNode);
+        Node prev = node(idx - 1);
+        Node next = prev.next;
+        Node newNode = new Node(input);
+
+        link(prev, newNode);
+        link(newNode, next);
         size++;
+    }
+
+    private void link(Node prev, Node next) {
+        prev.setNext(next);
+        next.setPrev(prev);
     }
 
     @Override
