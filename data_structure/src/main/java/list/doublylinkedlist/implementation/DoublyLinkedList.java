@@ -64,7 +64,11 @@ public class DoublyLinkedList {
     }
 
     public void addFirst(Object input) {
-        head = new Node(input, head);
+        Node newNode = new Node(input, head);
+        if (head != null) {
+            head.prev = newNode;
+        }
+        head = newNode;
         size++;
         if (head.next == null) {
             tail = head;
@@ -72,12 +76,13 @@ public class DoublyLinkedList {
     }
 
     public void addLast(Object input) {
-        Node lastNode = new Node(input, null);
+        Node newNode = new Node(input, null);
         if (size == 0) {
             addFirst(input);
         } else {
-            tail.next = lastNode;
-            tail = lastNode;
+            newNode.prev = tail;  // TODO : 생성자로 리펙토링하기
+            tail.next = newNode;
+            tail = newNode;
             size++;
         }
     }
