@@ -4,3 +4,6 @@
 [submodule "inflearn-yhkim"]
 	path = inflearn-yhkim
 	url = git@github.com:sandropark/inflearn-yhkim.git
+[submodule "fastcampus/project-board"]
+	path = fastcampus/project-board
+	url = git@github.com:sandropark/fastcampus-project-board.git
