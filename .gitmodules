@@ -1,0 +1,6 @@
+[submodule "study"]
+	path = study
+	url = git@github.com:sandropark/study.git
+[submodule "inflearn-yhkim"]
+	path = inflearn-yhkim
+	url = git@github.com:sandropark/inflearn-yhkim.git
