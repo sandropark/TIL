@@ -1,7 +1,0 @@
-
-apply from: "../jpa-common.gradle"
-
-dependencies {
-
-}
-
