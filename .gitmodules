@@ -7,3 +7,6 @@
 [submodule "inflearn/yhkim"]
 	path = inflearn/yhkim
 	url = git@github.com:sandropark/inflearn-yhkim.git
+[submodule "inflearn/toby-spring-boot"]
+	path = inflearn/toby-spring-boot
+	url = git@github.com:sandropark/toby-spring-boot.git
