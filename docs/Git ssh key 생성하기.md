@@ -1,4 +1,4 @@
-# Git SSH key 생성하기
+# GitHub SSH key 생성하기
 
 1. 터미널 접속
 
