@@ -26,3 +26,8 @@ Host github.com
     Hostname ssh.github.com
     Port 443
 ```
+
+# Stash
+
+tracked 파일을 잠깐 빼두고 브랜치를 생성하고 다시 불러올 수 있다. 
+
