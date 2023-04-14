@@ -1,3 +1,9 @@
+- [GitHub SSH key 생성하기](#github-ssh-key-생성하기)
+- [GitHub Submodule을 포함하는 저장소 clone하기](#github-submodule을-포함하는-저장소-clone하기)
+- [한 컴퓨터에서 Github 계정 여러개 사용하기](#한-컴퓨터에서-github-계정-여러개-사용하기)
+- [원격 저장소 확인 및 변경하는 방법](#원격-저장소-확인-및-변경하는-방법)
+
+
 # GitHub SSH key 생성하기
 
 1. 터미널 접속
@@ -140,3 +146,16 @@ git clone --recursive https://github.com/username/repo.git
    이렇게 해야 개인 ssh key로 인증을 거쳐서 clone이 된다.
    
    이제 개인과 회사 계정을 편하게 사용할 수 있다. 
+
+# 원격 저장소 확인 및 변경하는 방법
+
+`git remote -v` 명령어를 사용해서 연결된 원격저장소를 확인할 수 있다. 
+
+만약 여러 계정을 사용하다가 push나 pull할 때 permissoin denied 가 뜰 경우 먼저 원격 저장소를 확인하고 `~/.ssh/config`에 설정한 host로 설정되어 있는지 확인한다. 
+
+예를들어 `git remote -v` 명령어로 원격저장소를 확인했는데 `origin git@github.com/__.git` 이다. 
+`~/.ssh/config`에는 `host github.com-personal`이라면 ssh key 설정이 다르기 때문에 권한 에러가 생긴 것이다. 
+
+이럴 때는 config에 설정한 host로 원격저장소 주소를 수정하면 된다. 
+
+`git remote set-url origin git@github.com-personal__.git`으로 수정하면 원격저장소 host를 변경했기 때문에 ssh key가 정확히 매칭되어 권한 문제가 없게된다. 
