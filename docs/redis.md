@@ -31,6 +31,8 @@ Homebrew를 이용해서 설치하면 된다.
 
 # Redis 세션 - 역직렬화 예외 발생 시 해결 방법
 
+- [솔루션](https://github.com/spring-projects/spring-session/issues/280)
+
 ## 문제 상황
 
 `UserDetails`를 구현한 객체의 필드를 추가한 다음 배포하는 경우 `SerializationException`이 발생한다. 
