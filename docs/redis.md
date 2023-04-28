@@ -29,7 +29,7 @@ Homebrew를 이용해서 설치하면 된다.
 
 `brew services start redis`
 
-# Redis 역직렬화 예외 발생 시 해결 방법
+# Redis 세션 - 역직렬화 예외 발생 시 해결 방법
 
 ## 문제 상황
 
