@@ -27,8 +27,8 @@ openapi3 {  // openapi3로 Opnen API 3 스팩을 만들 때 필요한 부가정�
     server = 'http://localhost:8080'
 		servers = [
             { url = "http://localhost:8080" },          // local
-            { url = "http://dev-lifelog.huray.io" },    // dev
-            { url = "http://lifelog.huray.io" }         // prd
+            { url = "http://dev-my.net" },    // dev
+            { url = "http://my.net" }         // prd
     ]
 
     title = 'MY API'
