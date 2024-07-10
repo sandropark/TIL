@@ -48,11 +48,11 @@ git clone --recursive https://github.com/username/repo.git
    ssh key가 2개이기 때문에 쉽게 관리하기 위해서 config 파일을 생성해서 설정을 해둔다.
    
    ```
-   Host github.com-personal
+   Host personal
        HostName github.com
        IdentityFile ~/.ssh/personal
 
-   Host github.com-company
+   Host company
       HostName github.com
       IdentityFile ~/.ssh/company
    ```
@@ -97,6 +97,13 @@ git clone --recursive https://github.com/username/repo.git
    ```
    # ~/.gitconfig
    
+   # 원격저장소와 연결할 때 따로 키를 지정하지 않고 사용자의 이름과 회사이름에 따라서 키를 매핑한다.
+   [url "git@personal:<username>"]
+    insteadOf = git@github.com:<username>
+
+   [url "git@company:<companyname>"]
+      insteadOf = git@github.com:<companyname>
+
    [user]
        useConfigOnly = true    # username과 email이 없으면 commit이 안되는 설정
 
@@ -135,27 +142,10 @@ git clone --recursive https://github.com/username/repo.git
    $ git clone git@github.com:[개인 계정 username]/[저장소 이름].git 
    ```
 
-   평소에 하던대로 clone하면 에러가 난다. ssh key가 2개인데 clone 시 개인 계정 key를 지정해주지 않았기 때문이다. 
-
-   ```bash
-   $ git clone git@github.com-personal:[개인 계정 username]/[저장소 이름].git 
-   ```
-   
-   이렇게 host 명을 수정해야 한다. 위에서 `~/.ssh/config`에 `Host github.com-personal`로 설정했기 때문에 
-
-   이렇게 해야 개인 ssh key로 인증을 거쳐서 clone이 된다.
-   
-   이제 개인과 회사 계정을 편하게 사용할 수 있다. 
+   username으로 키를 맵핑하기 때문에 정상적으로 클론된다. 
 
 # 원격 저장소 확인 및 변경하는 방법
 
 `git remote -v` 명령어를 사용해서 연결된 원격저장소를 확인할 수 있다. 
 
 만약 여러 계정을 사용하다가 push나 pull할 때 permissoin denied 가 뜰 경우 먼저 원격 저장소를 확인하고 `~/.ssh/config`에 설정한 host로 설정되어 있는지 확인한다. 
-
-예를들어 `git remote -v` 명령어로 원격저장소를 확인했는데 `origin git@github.com/__.git` 이다. 
-`~/.ssh/config`에는 `host github.com-personal`이라면 ssh key 설정이 다르기 때문에 권한 에러가 생긴 것이다. 
-
-이럴 때는 config에 설정한 host로 원격저장소 주소를 수정하면 된다. 
-
-`git remote set-url origin git@github.com-personal__.git`으로 수정하면 원격저장소 host를 변경했기 때문에 ssh key가 정확히 매칭되어 권한 문제가 없게된다. 

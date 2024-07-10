@@ -109,7 +109,7 @@ Spring Batch 실행 시 meta data 테이블을 사용하기 때문에 **초기 �
 - [SpringBootApplication](#springbootapplication)
 - [JobConfig](#jobconfig)
 
-### application.yml
+#### application.yml
 
 어떤 job을 실행할지 설정할 수 있다.
 
@@ -120,7 +120,7 @@ spring:
       names: ${job.name:NONE}
 ```
 
-### SpringBootApplication
+#### SpringBootApplication
 
 `@EnableBatchProcessing`을 달아줘야 한다.
 
@@ -129,7 +129,7 @@ spring:
 @SpringBootApplication
 ```
 
-### JobConfig
+### Tasklet
 
 Job과 Step을 설정할 수 있다. 
 
@@ -176,11 +176,11 @@ Job과 Step과 Tasklet을 각각 빈으로 등록한 뒤 Step에 Tasklet을 주�
 
 이제 Application을 실행하면 `Hello Spring Batch`가 출력된다. 
 
-### DB 확인
+#### DB 확인
 
-배치를 실행한 뒤 DB를 확인해보면 데이터가 쌓인 것을 확인할 수 있다.
+배치를 실행한 뒤 DB를 확인해보면 어떤 작업을 했는지 로그처럼 데이터가 쌓인 것을 확인할 수 있다. 
 
-### 빌드 및 실행
+#### 빌드 및 실행
 
 프로젝트를 빌드하면 `build/lib/`에 jar 파일이 생성된다. 
 
@@ -190,3 +190,65 @@ Job과 Step과 Tasklet을 각각 빈으로 등록한 뒤 Step에 Tasklet을 주�
 
 실무에서 배치를 사용할 때는 `Quartz` 프레임워크나 `Jenkins`와 함께 사용한다. 
 
+### Chunck
+
+```java
+@RequiredArgsConstructor
+@Configuration
+public class PlainTextJobConfig {
+
+    private final JobBuilderFactory jobBuilderFactory;
+    private final StepBuilderFactory stepBuilderFactory;
+    private final PlainTextRepository plainTextRepository;
+
+    @Bean
+    public Job plainTextJob(Step plainTextStep) {
+        return jobBuilderFactory.get("plainTextJob")
+                .incrementer(new RunIdIncrementer())
+                .start(plainTextStep)
+                .build();
+    }
+
+    @JobScope
+    @Bean
+    public Step plainTextStep(ItemReader<PlainText> plainTextReader,
+                              ItemProcessor<PlainText, String> plainTextProcessor,
+                              ItemWriter<String> plainTextWriter) {
+        return stepBuilderFactory.get("plainTextStep")
+                .<PlainText, String>chunk(5)    // ItemReader에서 지정한 크기와 동일하게 설정한다. 
+                .reader(plainTextReader)
+                .processor(plainTextProcessor)
+                .writer(plainTextWriter)
+                .build();
+    }
+
+    @StepScope
+    @Bean
+    public RepositoryItemReader<PlainText> plainTextReader() {  // DB에서 데이터를 읽어온다.
+        return new RepositoryItemReaderBuilder<PlainText>() // 가져올 데이터 타입
+                .name("plainTextReader")
+                .repository(plainTextRepository)  // 사용할 Repository
+                .methodName("findBy")   
+                .pageSize(5)    // 한 번에 가져올 데이터의 수
+                .arguments(List.of())
+                .sorts(Collections.singletonMap("id", Sort.Direction.DESC))
+                .build();
+    }
+
+    @StepScope
+    @Bean
+    public ItemProcessor<PlainText, String> plainTextProcessor() {  // 데이터를 가공한다. <읽어올 데이터 타입, 변환할 타입>
+        return item -> "processed " + item.getText();  // PlainText 객체를 String으로 변환한다.
+    }
+
+    @StepScope
+    @Bean
+    public ItemWriter<String> plainTextWriter() {  // 각 Chunck 별로 어떤 작업을 할 지 설정한다. 
+        return items -> {   
+            items.forEach(System.out::println);    
+            System.out.println("==== chunk is finished ====");
+        };
+    }
+
+}
+```
