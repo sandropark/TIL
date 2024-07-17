@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="test">
+  <h1>test</h1>
+  <th:block th:include="~{fragments/test :: test2}"></th:block>
+</div>
+
+<div th:fragment="test2">
+  <h2>test2</h2>
+</div>
+
+</html>

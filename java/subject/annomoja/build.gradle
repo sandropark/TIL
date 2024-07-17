@@ -1,0 +1,7 @@
+
+
+dependencies {
+    implementation files('libs/subject-magicmoja-0.0.1-SNAPSHOT-plain.jar')
+    annotationProcessor files('libs/subject-magicmoja-0.0.1-SNAPSHOT-plain.jar')
+    annotationProcessor 'com.squareup:javapoet:1.13.0'
+}

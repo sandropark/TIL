@@ -1,0 +1,28 @@
+repositories {
+//    maven {
+//        allowInsecureProtocol true
+//        url = "http://localhost:8081/repository/horn-client/"
+//        credentials {
+//            username = "admin"
+//            password = "8989"
+//        }
+//    }
+    maven {
+        name = "HurayNexus"
+        url = "https://nexus.huray.io/repository/maven-hosted/"
+        credentials {
+            username = System.getenv("NEXUS_USERNAME")
+            password = System.getenv("NEXUS_PASSWORD")
+        }
+    }
+}
+
+dependencies {
+//    implementation 'net.huray.platform:horn-client:1.0.4'
+//    implementation 'net.huray.platform:horn-client:0.9.9-275'
+//    implementation 'org.apache.httpcomponents:httpclient:4.5.14'
+//    implementation 'net.huray.platform:horn-client:0.0.8'
+//    implementation 'org.apache.httpcomponents:httpclient:4.5.14'
+}
+
+bootJar {  enabled = false  }

@@ -1,0 +1,17 @@
+ext {
+    set("springCloudVersion", "2021.0.3")   // compatility with SpringBoot 2.7.x
+//    set("springCloudVersion", "2022.0.1") // compatility with SpringBoot 3.0.x
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
+    implementation 'io.github.openfeign:feign-httpclient:12.1'
+}
+

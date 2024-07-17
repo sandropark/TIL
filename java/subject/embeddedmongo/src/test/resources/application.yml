@@ -1,0 +1,11 @@
+spring:
+  mongodb:
+    embedded:
+      version: 4.2.13
+  output:
+    ansi:
+      enabled: always
+
+logging:
+  level:
+    de.flapdoodle.embed.mongo: debug

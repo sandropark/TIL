@@ -1,0 +1,6 @@
+huray:
+  platform:
+    horn:
+      service-id: himom-service-id
+      kafka-servers: kafka://10.10.17.11:9092,kafka://10.10.17.12:9092,kafka://10.10.17.13:9092 # 개발
+#      kafka-servers: kafka://10.20.14.17:9092,kafka://10.20.14.18:9092,kafka://10.20.14.19:9092 # 운영

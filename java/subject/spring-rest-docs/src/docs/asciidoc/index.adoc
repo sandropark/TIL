@@ -1,0 +1,22 @@
+# REST Docs 제목
+Andy Wilkson;
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[[Memeber-API]]
+== Member API
+
+[[Memeber-단일-조회]]
+=== Member 단일 조회
+operation::member-api-test/get-members[snippets='http-request,http-response']
+
+[[Memeber-페이징-조회]]
+=== Member 페이징 조회
+[[Memeber-생성]]
+=== Member 생성
+[[Memeber-수정]]
+=== Member 수정

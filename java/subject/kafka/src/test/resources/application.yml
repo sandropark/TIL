@@ -1,0 +1,12 @@
+spring:
+  kafka:
+    producer:
+      bootstrap-servers: kafka://10.10.17.11:9092,kafka://10.10.17.12:9092,kafka://10.10.17.13:9092
+      acks: -1
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+huray:
+  platform:
+    horn:
+      push-topic-name: "horn-push"
+      project-topic-name: "horn-project"
