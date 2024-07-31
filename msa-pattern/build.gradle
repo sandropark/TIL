@@ -32,6 +32,7 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
 
     // eventuate-tram
+    implementation "io.eventuate.tram.core:eventuate-tram-aggregate-domain-events:$eventuateTramVersion"
     implementation "io.eventuate.tram.core:eventuate-tram-spring-messaging:$eventuateTramVersion"
     implementation "io.eventuate.tram.core:eventuate-tram-spring-commands:$eventuateTramVersion"
     implementation "io.eventuate.tram.core:eventuate-tram-spring-jdbc-kafka:$eventuateTramVersion"
