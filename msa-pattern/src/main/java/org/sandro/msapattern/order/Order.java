@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.sandro.msapattern.exception.OrderMinimumNotMetException;
 import org.sandro.msapattern.exception.UnsupportedStateTransitionException;
+import org.sandro.msapattern.order.domain_event.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -55,10 +56,7 @@ public class Order {
     public static ResultWithDomainEvents<Order, OrderDomainEvent> createOrder(long consumerId, Restaurant restaurant, List<OrderLineItem> orderLineItems) {
         Order order = new Order(consumerId, restaurant.getId(), orderLineItems);
         List<OrderDomainEvent> events = singletonList(new OrderCreatedEvent(
-                new OrderDetails(orderLineItems,
-                        order.getOrderTotal(),
-                        restaurant.getId(),
-                        consumerId),
+                new OrderDetails(orderLineItems, order.getOrderTotal(), restaurant.getId(), consumerId),
                 restaurant.getName()));
         return new ResultWithDomainEvents<>(order, events);
     }

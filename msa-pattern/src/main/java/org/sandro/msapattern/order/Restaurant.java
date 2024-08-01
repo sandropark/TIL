@@ -4,11 +4,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.sandro.msapattern.order.domain_event.OrderDomainEvent;
 
-import java.awt.*;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Getter
 @AllArgsConstructor
@@ -20,7 +19,7 @@ public class Restaurant {
     @Id
     private Long id;
 
-//    @Embedded
+    //    @Embedded
     @ElementCollection
     @CollectionTable(name = "order_service_restaurant_menu_items")
     private List<MenuItem> menuItems;

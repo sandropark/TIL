@@ -5,6 +5,8 @@ import io.eventuate.tram.commands.consumer.CommandMessage;
 import io.eventuate.tram.messaging.common.Message;
 import io.eventuate.tram.sagas.participant.SagaCommandHandlersBuilder;
 import lombok.RequiredArgsConstructor;
+import org.sandro.msapattern.order.command.ApproveOrderCommand;
+import org.sandro.msapattern.order.command.RejectOrderCommand;
 
 import static io.eventuate.tram.commands.consumer.CommandHandlerReplyBuilder.withSuccess;
 

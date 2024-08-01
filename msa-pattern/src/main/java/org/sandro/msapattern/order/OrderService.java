@@ -1,6 +1,7 @@
 package org.sandro.msapattern.order;
 
 import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
+import io.eventuate.tram.events.publisher.DomainEventPublisher;
 import io.eventuate.tram.sagas.orchestration.SagaManager;
 import io.micrometer.core.instrument.MeterRegistry;
 import lombok.RequiredArgsConstructor;
@@ -8,14 +9,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.sandro.msapattern.exception.InvalidMenuItemIdException;
 import org.sandro.msapattern.exception.OrderNotFoundException;
 import org.sandro.msapattern.exception.RestaurantNotFoundException;
+import org.sandro.msapattern.order.domain_event.OrderDomainEvent;
+import org.sandro.msapattern.order.repo.OrderRepository;
+import org.sandro.msapattern.order.repo.RestaurantRepository;
+import org.sandro.msapattern.order.saga.CreateOrderSagaState;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-
-import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,37 +31,34 @@ public class OrderService {
     private final SagaManager<ReviseOrderSagaData> reviseOrderSagaManager;
     private final OrderDomainEventPublisher orderAggregateEventPublisher;
     private final Optional<MeterRegistry> meterRegistry;
+    private final DomainEventPublisher eventPublisher;
 
-    public Order createOrder(long consumerId, long restaurantId,
-                             List<MenuItemIdAndQuantity> lineItems) {
+    public Order createOrder(long consumerId, long restaurantId, List<MenuItemIdAndQuantity> lineItems) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new RestaurantNotFoundException(restaurantId));
-
         List<OrderLineItem> orderLineItems = makeOrderLineItems(lineItems, restaurant);
-
-        ResultWithDomainEvents<Order, OrderDomainEvent> orderAndEvents =
-                Order.createOrder(consumerId, restaurant, orderLineItems);
-
+        ResultWithDomainEvents<Order, OrderDomainEvent> orderAndEvents = Order.createOrder(consumerId, restaurant, orderLineItems); // Order 생성
         Order order = orderAndEvents.result;
         orderRepository.save(order);
-
         orderAggregateEventPublisher.publish(order, orderAndEvents.events);
-        OrderDetails orderDetails = new OrderDetails(orderLineItems, order.getOrderTotal(), restaurantId, consumerId);
-
-        CreateOrderSagaState data = new CreateOrderSagaState(order.getId(), orderDetails);
-        createOrderSagaManager.create(data, Order.class, order.getId());
-
+        CreateOrderSagaState data = createOrderSagaState(consumerId, restaurantId, order, orderLineItems);
+        createOrderSagaManager.create(data, Order.class, order.getId());  // 오케스트레이터 인스턴스 생성 (첫번째 사가 참여자에게 커맨드 메서드 전달)
         meterRegistry.ifPresent(mr -> mr.counter("placed_orders").increment());
-
         return order;
     }
 
+    private static CreateOrderSagaState createOrderSagaState(long consumerId, long restaurantId, Order order, List<OrderLineItem> orderLineItems) {
+        return new CreateOrderSagaState(order.getId(), new OrderDetails(orderLineItems, order.getOrderTotal(), restaurantId, consumerId));
+    }
 
     private List<OrderLineItem> makeOrderLineItems(List<MenuItemIdAndQuantity> lineItems, Restaurant restaurant) {
-        return lineItems.stream().map(li -> {
-            MenuItem om = restaurant.findMenuItem(li.getMenuItemId()).orElseThrow(() -> new InvalidMenuItemIdException(li.getMenuItemId()));
-            return new OrderLineItem(li.getQuantity(), li.getMenuItemId(), om.getName(), om.getPrice());
-        }).collect(toList());
+        return lineItems.stream()
+                .map(li -> {
+                    MenuItem om = restaurant.findMenuItem(li.getMenuItemId())
+                            .orElseThrow(() -> new InvalidMenuItemIdException(li.getMenuItemId()));
+                    return new OrderLineItem(li.getQuantity(), li.getMenuItemId(), om.getName(), om.getPrice());
+                })
+                .toList();
     }
 
 
