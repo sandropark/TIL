@@ -1,45 +1,87 @@
 package org.sandro.msapattern.order;
 
-import io.eventuate.tram.commands.common.Command;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.Setter;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Slf4j
-@NoArgsConstructor
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+
 public class CreateOrderSagaState {
-    @Getter
-    private Long orderId;
-    private OrderDetails orderDetails;
-    private long ticketId;
 
-    public CreateOrderSagaState(Long id, OrderDetails orderDetails) {
-        this.orderId = id;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Getter @Setter private Long orderId;
+
+    @Getter private OrderDetails orderDetails;
+    @Setter @Getter private long ticketId;
+
+    private CreateOrderSagaState() {
+    }
+
+    public CreateOrderSagaState(Long orderId, OrderDetails orderDetails) {
+        this.orderId = orderId;
         this.orderDetails = orderDetails;
     }
 
-    public CreateTicket makeCreateTicketCommand() {
-        return new CreateTicket(orderDetails.restaurantId(), orderId, makeTicketDetails(orderDetails));
+    @Override
+    public boolean equals(Object o) {
+        return EqualsBuilder.reflectionEquals(this, o);
     }
 
-    public void handleCreateTicketReply(CreateTicketReply reply) {
-        log.debug("ticketId = {}", reply.getTicketId());
-        this.ticketId = reply.getTicketId();
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
-    public CancelCreateTicket makeCancelCreateTicketCommand() {
-        return new CancelCreateTicket(orderId);
+    CreateTicket makeCreateTicketCommand() {
+        return new CreateTicket(getOrderDetails().getRestaurantId(), getOrderId(), makeTicketDetails(getOrderDetails()));
     }
 
-    private Object makeTicketDetails(OrderDetails orderDetails) {
-        return null;
+    private TicketDetails makeTicketDetails(OrderDetails orderDetails) {
+        // TODO FIXME
+        return new TicketDetails(makeTicketLineItems(orderDetails.getLineItems()));
     }
 
-    public Command makeRejectOrderCommand() {
-        return null;
+    private List<TicketLineItem> makeTicketLineItems(List<OrderLineItem> lineItems) {
+        return lineItems.stream().map(this::makeTicketLineItem).collect(toList());
     }
 
-    public Command makeVaildateOrderByConsumerCommand() {
-        return null;
+    private TicketLineItem makeTicketLineItem(OrderLineItem orderLineItem) {
+        return new TicketLineItem(orderLineItem.getQuantity(), orderLineItem.getMenuItemId(), orderLineItem.getName());
+    }
+
+    void handleCreateTicketReply(CreateTicketReply reply) {
+        logger.debug("getTicketId {}", reply.getTicketId());
+        setTicketId(reply.getTicketId());
+    }
+
+    CancelCreateTicket makeCancelCreateTicketCommand() {
+        return new CancelCreateTicket(getOrderId());
+    }
+
+    RejectOrderCommand makeRejectOrderCommand() {
+        return new RejectOrderCommand(getOrderId());
+    }
+
+    ValidateOrderByConsumer makeValidateOrderByConsumerCommand() {
+        return new ValidateOrderByConsumer(getOrderDetails().getConsumerId(), getOrderId(), getOrderDetails().getOrderTotal());
+    }
+
+    AuthorizeCommand makeAuthorizeCommand() {
+        return new AuthorizeCommand(getOrderDetails().getConsumerId(), getOrderId(), getOrderDetails().getOrderTotal());
+    }
+
+    ApproveOrderCommand makeApproveOrderCommand() {
+        return new ApproveOrderCommand(getOrderId());
+    }
+
+    ConfirmCreateTicket makeConfirmCreateTicketCommand() {
+        return new ConfirmCreateTicket(getTicketId());
+
     }
 }

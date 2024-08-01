@@ -1,9 +1,21 @@
 package org.sandro.msapattern.order;
 
-import io.eventuate.tram.commands.consumer.CommandWithDestination;
-
-import java.util.function.Function;
+import io.eventuate.tram.commands.common.Success;
+import io.eventuate.tram.sagas.simpledsl.CommandEndpoint;
+import io.eventuate.tram.sagas.simpledsl.CommandEndpointBuilder;
 
 public class OrderServiceProxy {
-    public Function<CreateOrderSagaState, CommandWithDestination> reject;
+
+    public final CommandEndpoint<RejectOrderCommand> reject = CommandEndpointBuilder
+            .forCommand(RejectOrderCommand.class)
+            .withChannel(OrderServiceChannels.orderServiceChannel)
+            .withReply(Success.class)
+            .build();
+
+    public final CommandEndpoint<ApproveOrderCommand> approve = CommandEndpointBuilder
+            .forCommand(ApproveOrderCommand.class)
+            .withChannel(OrderServiceChannels.orderServiceChannel)
+            .withReply(Success.class)
+            .build();
+
 }

@@ -40,6 +40,9 @@ dependencies {
     implementation "io.eventuate.tram.sagas:eventuate-tram-sagas-orchestration-simple-dsl:$eventuateTramSagasVersion"
     implementation "io.eventuate.tram.sagas:eventuate-tram-sagas-participant:$eventuateTramSagasVersion"
 
+//    implementation "io.micrometer:micrometer-registry-prometheus:$micrometerVersion"
+    implementation "io.micrometer:micrometer-registry-prometheus"
+
     implementation 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 

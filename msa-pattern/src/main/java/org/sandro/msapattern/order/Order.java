@@ -2,7 +2,9 @@ package org.sandro.msapattern.order;
 
 import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.sandro.msapattern.exception.OrderMinimumNotMetException;
 import org.sandro.msapattern.exception.UnsupportedStateTransitionException;
 
@@ -19,6 +21,7 @@ import static org.sandro.msapattern.order.OrderState.*;
 @Access(AccessType.FIELD)
 public class Order {
     public static ResultWithDomainEvents<Order, OrderDomainEvent>
+
     createOrder(long consumerId, Restaurant restaurant, List<OrderLineItem> orderLineItems) {
         Order order = new Order(consumerId, restaurant.getId(), orderLineItems);
         List<OrderDomainEvent> events = singletonList(new OrderCreatedEvent(
@@ -28,17 +31,17 @@ public class Order {
         return new ResultWithDomainEvents<>(order, events);
     }
 
-    @Id
+    @Setter @Getter @Id
     @GeneratedValue
     private Long id;
 
-    @Version
+    @Getter @Version
     private Long version;
 
-    @Enumerated(EnumType.STRING)
+    @Getter @Enumerated(EnumType.STRING)
     private OrderState state;
 
-    private Long consumerId;
+    @Getter private Long consumerId;
     private Long restaurantId;
 
     @Embedded
@@ -51,7 +54,7 @@ public class Order {
     private PaymentInformation paymentInformation;
 
     @Embedded
-    private Money orderMinimum = new Money(Integer.MAX_VALUE);
+    private final Money orderMinimum = new Money(Integer.MAX_VALUE);
 
     public Order(long consumerId, long restaurantId, List<OrderLineItem> orderLineItems) {
         this.consumerId = consumerId;
@@ -59,15 +62,6 @@ public class Order {
         this.orderLineItems = new OrderLineItems(orderLineItems);
         this.state = APPROVAL_PENDING;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
 
     public Money getOrderTotal() {
         return orderLineItems.orderTotal();
@@ -111,7 +105,6 @@ public class Order {
             default:
                 throw new UnsupportedStateTransitionException(state);
         }
-
     }
 
     public List<OrderDomainEvent> noteRejected() {
@@ -123,9 +116,7 @@ public class Order {
             default:
                 throw new UnsupportedStateTransitionException(state);
         }
-
     }
-
 
     public List<OrderDomainEvent> noteReversingAuthorization() {
         return null;
@@ -174,24 +165,12 @@ public class Order {
     }
 
 
-    public Long getVersion() {
-        return version;
-    }
-
     public List<OrderLineItem> getLineItems() {
         return orderLineItems.getLineItems();
-    }
-
-    public OrderState getState() {
-        return state;
     }
 
     public long getRestaurantId() {
         return restaurantId;
     }
 
-
-    public Long getConsumerId() {
-        return consumerId;
-    }
 }

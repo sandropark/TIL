@@ -1,9 +1,15 @@
 package org.sandro.msapattern.order;
 
-import io.eventuate.tram.commands.consumer.CommandWithDestination;
-
-import java.util.function.Function;
+import io.eventuate.tram.commands.common.Success;
+import io.eventuate.tram.sagas.simpledsl.CommandEndpoint;
+import io.eventuate.tram.sagas.simpledsl.CommandEndpointBuilder;
 
 public class ConsumerServiceProxy {
-    public Function<CreateOrderSagaState, CommandWithDestination> validateOrder;
+
+    public final CommandEndpoint<ValidateOrderByConsumer> validateOrder = CommandEndpointBuilder
+            .forCommand(ValidateOrderByConsumer.class)
+            .withChannel(ConsumerServiceChannels.consumerServiceChannel)
+            .withReply(Success.class)
+            .build();
+
 }
