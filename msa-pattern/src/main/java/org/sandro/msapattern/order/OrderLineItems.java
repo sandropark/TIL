@@ -3,31 +3,23 @@ package org.sandro.msapattern.order;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embeddable;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Embeddable
 public class OrderLineItems {
-
     @ElementCollection
     @CollectionTable(name = "order_line_items")
     private List<OrderLineItem> lineItems;
-
-    private OrderLineItems() {
-    }
-
-    public OrderLineItems(List<OrderLineItem> lineItems) {
-        this.lineItems = lineItems;
-    }
-
-    public List<OrderLineItem> getLineItems() {
-        return lineItems;
-    }
-
-    public void setLineItems(List<OrderLineItem> lineItems) {
-        this.lineItems = lineItems;
-    }
 
     OrderLineItem findOrderLineItem(String lineItemId) {
         return lineItems.stream().filter(li -> li.getMenuItemId().equals(lineItemId)).findFirst().get();

@@ -1,35 +1,18 @@
 package org.sandro.msapattern.order;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.Map;
 import java.util.Optional;
 
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderRevision {
-
-  private Optional<DeliveryInformation> deliveryInformation = Optional.empty();
-  private Map<String, Integer> revisedLineItemQuantities;
-
-  private OrderRevision() {
-  }
-
-  public OrderRevision(Optional<DeliveryInformation> deliveryInformation, Map<String, Integer> revisedLineItemQuantities) {
-    this.deliveryInformation = deliveryInformation;
-    this.revisedLineItemQuantities = revisedLineItemQuantities;
-  }
-
-  public void setDeliveryInformation(Optional<DeliveryInformation> deliveryInformation) {
-    this.deliveryInformation = deliveryInformation;
-  }
-
-  public void setRevisedLineItemQuantities(Map<String, Integer> revisedLineItemQuantities) {
-    this.revisedLineItemQuantities = revisedLineItemQuantities;
-  }
-
-  public Optional<DeliveryInformation> getDeliveryInformation() {
-    return deliveryInformation;
-  }
-
-
-  public Map<String, Integer> getRevisedLineItemQuantities() {
-    return revisedLineItemQuantities;
-  }
+    private Optional<DeliveryInformation> deliveryInformation = Optional.empty();
+    private Map<String, Integer> revisedLineItemQuantities;
 }

@@ -14,5 +14,4 @@ public class OrderAuthorized implements OrderDomainEvent {
   public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this);
   }
-
 }

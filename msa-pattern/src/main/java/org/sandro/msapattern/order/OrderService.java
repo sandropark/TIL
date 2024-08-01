@@ -1,14 +1,13 @@
 package org.sandro.msapattern.order;
 
 import io.eventuate.tram.events.aggregates.ResultWithDomainEvents;
-import io.eventuate.tram.events.publisher.DomainEventPublisher;
 import io.eventuate.tram.sagas.orchestration.SagaManager;
 import io.micrometer.core.instrument.MeterRegistry;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sandro.msapattern.exception.InvalidMenuItemIdException;
 import org.sandro.msapattern.exception.OrderNotFoundException;
 import org.sandro.msapattern.exception.RestaurantNotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,9 +17,10 @@ import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
+@RequiredArgsConstructor
 @Transactional
 public class OrderService {
-    private final Logger logger = LoggerFactory.getLogger(getClass());
     private final OrderRepository orderRepository;
     private final RestaurantRepository restaurantRepository;
     private final SagaManager<CreateOrderSagaState> createOrderSagaManager;
@@ -28,19 +28,6 @@ public class OrderService {
     private final SagaManager<ReviseOrderSagaData> reviseOrderSagaManager;
     private final OrderDomainEventPublisher orderAggregateEventPublisher;
     private final Optional<MeterRegistry> meterRegistry;
-
-    public OrderService(OrderRepository orderRepository, DomainEventPublisher eventPublisher, RestaurantRepository restaurantRepository,
-                        SagaManager<CreateOrderSagaState> createOrderSagaManager, SagaManager<CancelOrderSagaData> cancelOrderSagaManager,
-                        SagaManager<ReviseOrderSagaData> reviseOrderSagaManager, OrderDomainEventPublisher orderAggregateEventPublisher,
-                        Optional<MeterRegistry> meterRegistry) {
-        this.orderRepository = orderRepository;
-        this.restaurantRepository = restaurantRepository;
-        this.createOrderSagaManager = createOrderSagaManager;
-        this.cancelOrderSagaManager = cancelOrderSagaManager;
-        this.reviseOrderSagaManager = reviseOrderSagaManager;
-        this.orderAggregateEventPublisher = orderAggregateEventPublisher;
-        this.meterRegistry = meterRegistry;
-    }
 
     public Order createOrder(long consumerId, long restaurantId,
                              List<MenuItemIdAndQuantity> lineItems) {
@@ -56,8 +43,7 @@ public class OrderService {
         orderRepository.save(order);
 
         orderAggregateEventPublisher.publish(order, orderAndEvents.events);
-
-        OrderDetails orderDetails = new OrderDetails(consumerId, restaurantId, orderLineItems, order.getOrderTotal());
+        OrderDetails orderDetails = new OrderDetails(orderLineItems, order.getOrderTotal(), restaurantId, consumerId);
 
         CreateOrderSagaState data = new CreateOrderSagaState(order.getId(), orderDetails);
         createOrderSagaManager.create(data, Order.class, order.getId());
@@ -71,7 +57,7 @@ public class OrderService {
     private List<OrderLineItem> makeOrderLineItems(List<MenuItemIdAndQuantity> lineItems, Restaurant restaurant) {
         return lineItems.stream().map(li -> {
             MenuItem om = restaurant.findMenuItem(li.getMenuItemId()).orElseThrow(() -> new InvalidMenuItemIdException(li.getMenuItemId()));
-            return new OrderLineItem(li.getMenuItemId(), om.getName(), om.getPrice(), li.getQuantity());
+            return new OrderLineItem(li.getQuantity(), li.getMenuItemId(), om.getName(), om.getPrice());
         }).collect(toList());
     }
 

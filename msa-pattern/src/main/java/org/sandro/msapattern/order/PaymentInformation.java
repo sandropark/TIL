@@ -5,6 +5,5 @@ import jakarta.persistence.AccessType;
 
 @Access(AccessType.FIELD)
 public class PaymentInformation {
-
   private String paymentToken;
 }

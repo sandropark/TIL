@@ -20,17 +20,6 @@ import static org.sandro.msapattern.order.OrderState.*;
 @Table(name = "orders")
 @Access(AccessType.FIELD)
 public class Order {
-    public static ResultWithDomainEvents<Order, OrderDomainEvent>
-
-    createOrder(long consumerId, Restaurant restaurant, List<OrderLineItem> orderLineItems) {
-        Order order = new Order(consumerId, restaurant.getId(), orderLineItems);
-        List<OrderDomainEvent> events = singletonList(new OrderCreatedEvent(
-                new OrderDetails(consumerId, restaurant.getId(), orderLineItems,
-                        order.getOrderTotal()),
-                restaurant.getName()));
-        return new ResultWithDomainEvents<>(order, events);
-    }
-
     @Setter @Getter @Id
     @GeneratedValue
     private Long id;
@@ -61,6 +50,17 @@ public class Order {
         this.restaurantId = restaurantId;
         this.orderLineItems = new OrderLineItems(orderLineItems);
         this.state = APPROVAL_PENDING;
+    }
+
+    public static ResultWithDomainEvents<Order, OrderDomainEvent> createOrder(long consumerId, Restaurant restaurant, List<OrderLineItem> orderLineItems) {
+        Order order = new Order(consumerId, restaurant.getId(), orderLineItems);
+        List<OrderDomainEvent> events = singletonList(new OrderCreatedEvent(
+                new OrderDetails(orderLineItems,
+                        order.getOrderTotal(),
+                        restaurant.getId(),
+                        consumerId),
+                restaurant.getName()));
+        return new ResultWithDomainEvents<>(order, events);
     }
 
     public Money getOrderTotal() {
@@ -127,11 +127,11 @@ public class Order {
 
             case APPROVED:
                 LineItemQuantityChange change = orderLineItems.lineItemQuantityChange(orderRevision);
-                if (change.newOrderTotal.isGreaterThanOrEqual(orderMinimum)) {
+                if (change.newOrderTotal().isGreaterThanOrEqual(orderMinimum)) {
                     throw new OrderMinimumNotMetException();
                 }
                 this.state = REVISION_PENDING;
-                return new ResultWithDomainEvents<>(change, singletonList(new OrderRevisionProposed(orderRevision, change.currentOrderTotal, change.newOrderTotal)));
+                return new ResultWithDomainEvents<>(change, singletonList(new OrderRevisionProposed(orderRevision, change.currentOrderTotal(), change.newOrderTotal())));
 
             default:
                 throw new UnsupportedStateTransitionException(state);
@@ -159,7 +159,7 @@ public class Order {
             }
 
             this.state = APPROVED;
-            return singletonList(new OrderRevised(orderRevision, licd.currentOrderTotal, licd.newOrderTotal));
+            return singletonList(new OrderRevised(orderRevision, licd.currentOrderTotal(), licd.newOrderTotal()));
         }
         throw new UnsupportedStateTransitionException(state);
     }
@@ -168,9 +168,4 @@ public class Order {
     public List<OrderLineItem> getLineItems() {
         return orderLineItems.getLineItems();
     }
-
-    public long getRestaurantId() {
-        return restaurantId;
-    }
-
 }

@@ -5,7 +5,6 @@ import io.eventuate.tram.sagas.simpledsl.CommandEndpoint;
 import io.eventuate.tram.sagas.simpledsl.CommandEndpointBuilder;
 
 public class OrderServiceProxy {
-
     public final CommandEndpoint<RejectOrderCommand> reject = CommandEndpointBuilder
             .forCommand(RejectOrderCommand.class)
             .withChannel(OrderServiceChannels.orderServiceChannel)
@@ -17,5 +16,4 @@ public class OrderServiceProxy {
             .withChannel(OrderServiceChannels.orderServiceChannel)
             .withReply(Success.class)
             .build();
-
 }

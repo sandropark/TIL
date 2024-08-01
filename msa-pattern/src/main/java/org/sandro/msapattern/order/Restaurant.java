@@ -17,7 +17,6 @@ import java.util.Set;
 @Table(name = "order_service_restaurants")
 @Access(AccessType.FIELD)
 public class Restaurant {
-
     @Id
     private Long id;
 

@@ -1,19 +1,19 @@
 package org.sandro.msapattern.order;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreateTicketReply {
     private long ticketId;
-
-    private CreateTicketReply() {
-    }
-
-    public CreateTicketReply(long ticketId) {
-
-        this.ticketId = ticketId;
-    }
 
     @Override
     public String toString() {
@@ -30,11 +30,4 @@ public class CreateTicketReply {
         return HashCodeBuilder.reflectionHashCode(this);
     }
 
-    public void setTicketId(long ticketId) {
-        this.ticketId = ticketId;
-    }
-
-    public long getTicketId() {
-        return ticketId;
-    }
 }

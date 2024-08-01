@@ -2,13 +2,10 @@ package org.sandro.msapattern.order;
 
 import io.eventuate.tram.sagas.orchestration.SagaDefinition;
 import io.eventuate.tram.sagas.simpledsl.SimpleSaga;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class CreateOrderSaga implements SimpleSaga<CreateOrderSagaState> {
-
-    private final Logger logger = LoggerFactory.getLogger(getClass());
-
     private final SagaDefinition<CreateOrderSagaState> sagaDefinition;
 
     public CreateOrderSaga(OrderServiceProxy orderService, ConsumerServiceProxy consumerService, KitchenServiceProxy kitchenService,
@@ -32,11 +29,9 @@ public class CreateOrderSaga implements SimpleSaga<CreateOrderSagaState> {
 
     }
 
-
     @Override
     public SagaDefinition<CreateOrderSagaState> getSagaDefinition() {
         return sagaDefinition;
     }
-
 
 }
