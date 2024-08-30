@@ -1,0 +1,4 @@
+rootProject.name = 'msa-prac'
+
+include 'order-service'
+include 'account-service'
