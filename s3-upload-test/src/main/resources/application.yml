@@ -1,0 +1,7 @@
+cloud:
+  aws:
+    credentials:
+      access-key:
+      secret-key:
+    stack:
+      auto: false
