@@ -1,19 +1,25 @@
 package org.sandro.s3uploadtest;
 
+import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.net.URL;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @RequestMapping("/s3")
 @RestController
 public class S3Controller {
-    private static final List<PartETag> PARTS = new ArrayList<>();
+    private static final String BUCKET_NAME = "";
 
     private final AmazonS3 s3Client;
 
@@ -21,36 +27,61 @@ public class S3Controller {
         this.s3Client = s3Client;
     }
 
-    @PostMapping("/upload-init")
-    public InitiateMultipartUploadResult uploadInit(@RequestBody UploadInitReq req) {
-        InitiateMultipartUploadRequest initiateMultipartUploadRequest = new InitiateMultipartUploadRequest(req.bucketName, req.key);
-        return s3Client.initiateMultipartUpload(initiateMultipartUploadRequest);
+    // 멀티파트 업로드 요청 및 pre-signed url 생성
+    @PostMapping("/multipart-upload/init")
+    public UploadInitRes multipartUploadInit(@RequestBody MultipartUploadInitReq req) {
+        InitiateMultipartUploadRequest initiateMultipartUploadRequest = new InitiateMultipartUploadRequest(BUCKET_NAME, req.key);
+        InitiateMultipartUploadResult initiateMultipartUploadResult = s3Client.initiateMultipartUpload(initiateMultipartUploadRequest);
+        String uploadId = initiateMultipartUploadResult.getUploadId();
+
+        List<UploadInitRes.PreSignedUrl> preSignedUrls = IntStream.range(1, req.partCount + 1)
+                .mapToObj(partNumber -> {
+                    GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(BUCKET_NAME, req.key)
+                            .withMethod(HttpMethod.PUT)
+                            .withExpiration(Date.from(Instant.now().plus(30, ChronoUnit.MINUTES)));
+                    generatePresignedUrlRequest.addRequestParameter("uploadId", uploadId);
+                    generatePresignedUrlRequest.addRequestParameter("partNumber", String.valueOf(partNumber));
+                    URL url = s3Client.generatePresignedUrl(generatePresignedUrlRequest);
+                    return new UploadInitRes.PreSignedUrl(partNumber, url);
+                }).collect(Collectors.toList());
+
+        return new UploadInitRes(uploadId, preSignedUrls);
     }
 
-    @PutMapping("/upload-part")
-    public void uploadPart(@RequestBody MultiPartUploadRequest req) throws IOException {
-        File file = new ClassPathResource(req.fileName).getFile();
-
-        UploadPartRequest uploadPartRequest = new UploadPartRequest()
-                .withBucketName(req.bucketName)
-                .withKey(req.key)
-                .withUploadId(req.uploadId)
-                .withPartNumber(req.partNumber)
-                .withFile(file)
-                .withPartSize(file.length());
-
-        UploadPartResult uploadPartResult = s3Client.uploadPart(uploadPartRequest);
-        PARTS.add(uploadPartResult.getPartETag());
+    @PostMapping("/multipart-upload/complete")
+    public URL multipartUploadComplete(@RequestBody MultiPartUploadCompleteReq req) {
+        List<PartETag> partETagList = req.parts.stream()
+                .map(MultiPartUploadCompleteReq.MyPartETag::toPartETag)
+                .collect(Collectors.toList());
+        CompleteMultipartUploadRequest request = new CompleteMultipartUploadRequest(BUCKET_NAME, req.key, req.uploadId, partETagList);
+        s3Client.completeMultipartUpload(request);
+        return s3Client.getUrl(BUCKET_NAME, req.key);
     }
 
-    @PostMapping("/complete-upload")
-    public CompleteMultipartUploadResult completeUpload(@RequestBody MultiPartUploadRequest req) {
-        return s3Client.completeMultipartUpload(new CompleteMultipartUploadRequest(req.bucketName, req.key, req.uploadId, PARTS));
+    @PostMapping("/pre-signed-url")
+    public URL presignedUrl(@RequestBody PreSignedUrlRequest req) {
+        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(BUCKET_NAME, req.key)
+                .withMethod(HttpMethod.PUT)
+                .withExpiration(Date.from(Instant.now().plus(30, ChronoUnit.MINUTES)));
+        return s3Client.generatePresignedUrl(generatePresignedUrlRequest);
     }
 
-    public record UploadInitReq(String bucketName, String key) {
+    public record UploadInitRes(String uploadId, List<PreSignedUrl> preSignedUrls) {
+        public record PreSignedUrl(int partNumber, URL url) {
+        }
     }
 
-    public record MultiPartUploadRequest(String bucketName, String key, String uploadId, int partNumber, String fileName) {
+    public record MultipartUploadInitReq(String key, int partCount) {
+    }
+
+    public record PreSignedUrlRequest(String key, String uploadId, int partNumber) {
+    }
+
+    public record MultiPartUploadCompleteReq(String key, String uploadId, List<MyPartETag> parts) {
+        public record MyPartETag(int partNumber, String eTag) {
+            public PartETag toPartETag() {
+                return new PartETag(partNumber, eTag);
+            }
+        }
     }
 }
