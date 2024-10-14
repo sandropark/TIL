@@ -1,0 +1,7 @@
+bootJar.enabled true
+
+dependencies {
+    implementation project(":web")
+
+    testRuntimeOnly 'com.h2database:h2'
+}
