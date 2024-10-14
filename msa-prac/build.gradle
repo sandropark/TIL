@@ -1,0 +1,55 @@
+buildscript {
+    ext {
+        bootVersion = "3.1.12"
+        lombok = "org.projectlombok:lombok"
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$bootVersion"
+    }
+}
+
+allprojects {
+    group = 'org.sandro'
+}
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'org.springframework.boot'
+
+    sourceCompatibility = '17'
+
+    repositories {
+        mavenCentral()
+    }
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    dependencies {
+        implementation "org.springframework.boot:spring-boot-starter"
+
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+        implementation lombok
+        annotationProcessor lombok
+        testImplementation lombok
+        testAnnotationProcessor lombok
+
+        testImplementation "org.springframework.boot:spring-boot-starter-test"
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+}
+
+help.enabled(false)
