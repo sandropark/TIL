@@ -3,11 +3,12 @@ package org.sandro.s3uploadtest;
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -64,6 +65,24 @@ public class S3Controller {
                 .withMethod(HttpMethod.PUT)
                 .withExpiration(Date.from(Instant.now().plus(30, ChronoUnit.MINUTES)));
         return s3Client.generatePresignedUrl(generatePresignedUrlRequest);
+    }
+
+    @PostMapping(value = "/upload")
+    public String upload(MyFile file) {
+        MultipartFile file1 = file.file();
+        return "upload";
+    }
+
+    @GetMapping("/img")
+    public ResponseEntity img() {
+        S3Object object = s3Client.getObject(new GetObjectRequest("", ""));
+        try {
+            return ResponseEntity.ok()
+                    .contentType(MediaType.valueOf(object.getObjectMetadata().getContentType()))
+                    .body(object.getObjectContent().readAllBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public record UploadInitRes(String uploadId, List<PreSignedUrl> preSignedUrls) {

@@ -5,3 +5,8 @@ cloud:
       secret-key:
     stack:
       auto: false
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
